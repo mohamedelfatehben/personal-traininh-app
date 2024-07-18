@@ -2,8 +2,9 @@ const User = require("../models/User");
 const Program = require("../models/Program");
 const DailyProgram = require("../models/DailyProgram");
 const Exercise = require("../models/Exercise");
-const Nutrition = require("../models/Nutrition");
+const Nutrition = require("../models/Meal");
 
+// Get user profile
 exports.getUser = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
@@ -14,6 +15,7 @@ exports.getUser = async (req, res) => {
   }
 };
 
+// Update user profile
 exports.updateUser = async (req, res) => {
   const {
     age,
@@ -23,6 +25,7 @@ exports.updateUser = async (req, res) => {
     foodAllergies,
     budget,
     fitnessGoals,
+    gender,
   } = req.body;
 
   try {
@@ -38,6 +41,7 @@ exports.updateUser = async (req, res) => {
         user.foodAllergies = foodAllergies || user.foodAllergies;
         user.budget = budget || user.budget;
         user.fitnessGoals = fitnessGoals || user.fitnessGoals;
+        user.gender = gender || user.gender;
       }
       await user.save();
       return res.json(user);
@@ -129,6 +133,30 @@ exports.assignProgram = async (req, res) => {
     await user.save();
 
     res.json({ msg: "Program assigned successfully", user });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};
+
+exports.getAllTrainees = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const trainees = await User.find({ role: "trainee" })
+      .skip(skip)
+      .limit(limit)
+      .select("-password"); // Exclude password field
+
+    const totalTrainees = await User.countDocuments({ role: "trainee" });
+
+    res.json({
+      trainees,
+      totalPages: Math.ceil(totalTrainees / limit),
+      currentPage: page,
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");

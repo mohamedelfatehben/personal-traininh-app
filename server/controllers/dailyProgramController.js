@@ -1,5 +1,6 @@
-const User = require("../models/User");
 const DailyProgram = require("../models/DailyProgram");
+const Exercise = require("../models/Exercise");
+const Meal = require("../models/Meal");
 
 exports.getDailyPrograms = async (req, res) => {
   try {
@@ -18,7 +19,7 @@ exports.createDailyProgram = async (req, res) => {
 
   try {
     const exerciseIds = [];
-    const mealIds = [];
+    const mealEntries = [];
 
     // Process exercises
     for (const exercise of exercises) {
@@ -34,21 +35,26 @@ exports.createDailyProgram = async (req, res) => {
     }
 
     // Process meals
-    for (const meal of meals) {
+    for (const mealEntry of meals) {
+      const { meal, quantity } = mealEntry;
+      let mealId;
+
       if (meal._id) {
         // Use existing meal
-        mealIds.push(meal._id);
+        mealId = meal._id;
       } else {
         // Create new meal
-        const newMeal = new Nutrition(meal);
+        const newMeal = new Meal(meal);
         await newMeal.save();
-        mealIds.push(newMeal._id);
+        mealId = newMeal._id;
       }
+
+      mealEntries.push({ meal: mealId, quantity });
     }
 
     const dailyProgram = new DailyProgram({
       exercises: exerciseIds,
-      meals: mealIds,
+      meals: mealEntries,
     });
 
     await dailyProgram.save();

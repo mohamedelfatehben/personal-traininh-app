@@ -1,10 +1,10 @@
 const Plan = require("../models/Plan");
 
 exports.createPlan = async (req, res) => {
-  const { name, type, description, price } = req.body;
+  const { name, type, description, price, paymentType } = req.body;
 
   try {
-    const plan = new Plan({ name, type, description, price });
+    const plan = new Plan({ name, type, description, price, paymentType });
     await plan.save();
     res.json(plan);
   } catch (err) {

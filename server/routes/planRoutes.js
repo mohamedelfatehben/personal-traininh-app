@@ -5,27 +5,27 @@ const {
   getPlans,
   deletePlan,
 } = require("../controllers/planController");
-const { adminAuth } = require("../middlewares/authMiddleware");
+const { auth, trainerAuth } = require("../middlewares/authMiddleware");
 const router = express.Router();
 
 // @route   POST api/plans
 // @desc    Create a new plan
-// @access  Private (admin only)
-router.post("/", adminAuth, createPlan);
+// @access  Private (trainer only)
+router.post("/", trainerAuth, createPlan);
 
 // @route   PUT api/plans/:id
 // @desc    Update a plan
-// @access  Private (admin only)
-router.put("/:id", adminAuth, updatePlan);
+// @access  Private (trainer only)
+router.put("/:id", trainerAuth, updatePlan);
 
 // @route   GET api/plans
 // @desc    Get all plans
-// @access  Private (admin only)
-router.get("/", adminAuth, getPlans);
+// @access  Public
+router.get("/", auth, getPlans);
 
 // @route   DELETE api/plans/:id
 // @desc    Delete a plan
-// @access  Private (admin only)
-router.delete("/:id", adminAuth, deletePlan);
+// @access  Private (trainer only)
+router.delete("/:id", trainerAuth, deletePlan);
 
 module.exports = router;

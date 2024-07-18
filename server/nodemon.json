@@ -1,6 +1,6 @@
 {
   "ignore": ["node_modules"],
-  "watch": ["server.js", "routes/", ".env"],
+  "watch": ["server.js", "routes/", ".env", "controllers/", "models/"],
   "env": {
     "NODE_ENV": "development"
   }

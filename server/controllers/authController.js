@@ -2,8 +2,15 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
+// Register a new user
+// Register a new user
 exports.register = async (req, res) => {
-  const { name, email, password, role } = req.body;
+  let { name, email, password, role } = req.body;
+
+  // Default role to "trainee" if not provided
+  if (!role) {
+    role = "trainee";
+  }
 
   try {
     let user = await User.findOne({ email });
@@ -11,14 +18,28 @@ exports.register = async (req, res) => {
       return res.status(400).json({ msg: "User already exists" });
     }
 
-    // Ensure role is valid
-    const validRoles = ["admin", "trainer", "trainee"];
-    if (!validRoles.includes(role)) {
-      return res.status(400).json({ msg: "Invalid role" });
-    }
+    // Set trainee-specific fields to default values if the role is 'trainee'
+    const traineeFields =
+      role === "trainee"
+        ? {
+            age: null,
+            height: null,
+            weight: null,
+            trainingFrequency: "",
+            foodAllergies: [],
+            budget: null,
+            fitnessGoals: "",
+            gender: "",
+          }
+        : {};
 
-    // Create user object with required fields based on role
-    user = new User({ name, email, password, role });
+    user = new User({
+      name,
+      email,
+      password,
+      role,
+      ...traineeFields, // Add trainee-specific fields to the user
+    });
 
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(password, salt);
@@ -28,6 +49,7 @@ exports.register = async (req, res) => {
     const payload = {
       user: {
         id: user.id,
+        name: user.name, // Include name in the payload
         role: user.role,
       },
     };
@@ -46,7 +68,7 @@ exports.register = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
-
+// Login user
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -64,7 +86,8 @@ exports.login = async (req, res) => {
     const payload = {
       user: {
         id: user.id,
-        role: user.role,
+        name: user.name, // Include name in the payload
+        role: user.role, // Include role in the payload
       },
     };
 
@@ -83,8 +106,13 @@ exports.login = async (req, res) => {
   }
 };
 
+// Add a new trainer
 exports.addTrainer = async (req, res) => {
   const { name, email, password } = req.body;
+
+  if (!name || !email || !password) {
+    return res.status(400).json({ msg: "Please enter all required fields" });
+  }
 
   try {
     let user = await User.findOne({ email });
@@ -92,7 +120,6 @@ exports.addTrainer = async (req, res) => {
       return res.status(400).json({ msg: "User already exists" });
     }
 
-    // Create user object with 'trainer' role
     user = new User({ name, email, password, role: "trainer" });
 
     const salt = await bcrypt.genSalt(10);
