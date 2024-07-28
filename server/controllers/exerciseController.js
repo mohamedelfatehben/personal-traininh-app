@@ -20,8 +20,27 @@ exports.createExercise = async (req, res) => {
 };
 
 exports.getExercises = async (req, res) => {
+  const { page = 1, limit = 10 } = req.query;
+
   try {
-    const exercises = await Exercise.find();
+    const exercises = await Exercise.find()
+      .limit(Number(limit))
+      .skip((page - 1) * Number(limit))
+      .exec();
+
+    const count = await Exercise.countDocuments();
+    const totalPages = Math.ceil(count / limit);
+
+    res.json({ items: exercises, totalPages });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};
+
+exports.getAllExercises = async (req, res) => {
+  try {
+    const exercises = await Exercise.find({}, "_id name");
     res.json(exercises);
   } catch (err) {
     console.error(err.message);

@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import { getPlansApi } from "../../api/plans";
 import PaymentModal from "./PaymentModal";
 import { FaMoneyBillWave, FaInfoCircle, FaArrowRight } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 const PlanSelection = () => {
+  const user = useSelector((state) => state.authReducer);
   const [plans, setPlans] = useState([]);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [openPaymentModal, setOpenPaymentModal] = useState(false);
@@ -11,15 +13,16 @@ const PlanSelection = () => {
   useEffect(() => {
     const fetchPlans = async () => {
       try {
-        const response = await getPlansApi();
+        const response = await getPlansApi(user.token);
         setPlans(response.data);
       } catch (error) {
         console.error("Failed to fetch plans", error);
       }
     };
-
-    fetchPlans();
-  }, []);
+    if (user.token) {
+      fetchPlans();
+    }
+  }, [user.token]);
 
   const handlePlanSelection = (plan) => {
     setSelectedPlan(plan);
@@ -49,6 +52,12 @@ const PlanSelection = () => {
               <FaInfoCircle className="mr-2 text-indigo-600" /> Payment Type:{" "}
               {plan.paymentType}
             </p>
+            {plan.paymentType === "by day" && (
+              <p className="mt-4 text-gray-600 flex items-center">
+                <FaInfoCircle className="mr-2 text-indigo-600" /> Number of
+                Days: {plan.days}
+              </p>
+            )}
             <button
               className="mt-4 flex items-center justify-end text-indigo-600 hover:text-indigo-800"
               onClick={() => handlePlanSelection(plan)}

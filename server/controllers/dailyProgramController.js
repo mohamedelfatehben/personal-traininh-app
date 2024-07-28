@@ -1,12 +1,29 @@
 const DailyProgram = require("../models/DailyProgram");
-const Exercise = require("../models/Exercise");
-const Meal = require("../models/Meal");
 
+// Get daily programs for a user
 exports.getDailyPrograms = async (req, res) => {
+  const { page = 1, limit = 10 } = req.query;
+
   try {
-    const dailyPrograms = await DailyProgram.find({ user: req.user.id })
+    const dailyPrograms = await DailyProgram.find()
       .populate("exercises")
-      .populate("meals");
+      .limit(Number(limit))
+      .skip((page - 1) * Number(limit))
+      .exec();
+
+    const count = await DailyProgram.countDocuments();
+    const totalPages = Math.ceil(count / limit);
+
+    res.json({ items: dailyPrograms, totalPages });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};
+
+exports.getAllDailyPrograms = async (req, res) => {
+  try {
+    const dailyPrograms = await DailyProgram.find({}, "_id name");
     res.json(dailyPrograms);
   } catch (err) {
     console.error(err.message);
@@ -14,51 +31,56 @@ exports.getDailyPrograms = async (req, res) => {
   }
 };
 
+// Create a new daily program
 exports.createDailyProgram = async (req, res) => {
-  const { exercises, meals } = req.body;
+  const { name, exercises, meals, calories } = req.body;
 
   try {
-    const exerciseIds = [];
-    const mealEntries = [];
-
-    // Process exercises
-    for (const exercise of exercises) {
-      if (exercise._id) {
-        // Use existing exercise
-        exerciseIds.push(exercise._id);
-      } else {
-        // Create new exercise
-        const newExercise = new Exercise(exercise);
-        await newExercise.save();
-        exerciseIds.push(newExercise._id);
-      }
-    }
-
-    // Process meals
-    for (const mealEntry of meals) {
-      const { meal, quantity } = mealEntry;
-      let mealId;
-
-      if (meal._id) {
-        // Use existing meal
-        mealId = meal._id;
-      } else {
-        // Create new meal
-        const newMeal = new Meal(meal);
-        await newMeal.save();
-        mealId = newMeal._id;
-      }
-
-      mealEntries.push({ meal: mealId, quantity });
-    }
-
     const dailyProgram = new DailyProgram({
-      exercises: exerciseIds,
-      meals: mealEntries,
+      name,
+      exercises,
+      meals,
+      calories,
     });
 
     await dailyProgram.save();
     res.json(dailyProgram);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};
+
+// Update a daily program
+exports.updateDailyProgram = async (req, res) => {
+  const { name, exercises, meals, calories } = req.body;
+
+  try {
+    const dailyProgram = await DailyProgram.findById(req.params.id);
+    if (dailyProgram) {
+      dailyProgram.name = name || dailyProgram.name;
+      dailyProgram.exercises = exercises || dailyProgram.exercises;
+      dailyProgram.meals = meals || dailyProgram.meals;
+      dailyProgram.calories = calories || dailyProgram.calories;
+      await dailyProgram.save();
+      return res.json(dailyProgram);
+    }
+    res.status(404).json({ msg: "Daily Program not found" });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};
+
+// Delete a daily program
+exports.deleteDailyProgram = async (req, res) => {
+  try {
+    const dailyProgram = await DailyProgram.findById(req.params.id);
+    if (dailyProgram) {
+      await dailyProgram.remove();
+      return res.json({ msg: "Daily Program removed" });
+    }
+    res.status(404).json({ msg: "Daily Program not found" });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");

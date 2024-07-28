@@ -35,14 +35,6 @@ function Login() {
 
       // Dispatch actions to store user info in Redux
       dispatch(loginUser({ token, role: decodedToken.user.role }));
-      dispatch(
-        setUserInfo({
-          name: decodedToken.user.name,
-          id: decodedToken.user.id,
-          role: decodedToken.user.role,
-        })
-      );
-
       navigate("/dashboard"); // Adjust the path as needed
     } catch (err) {
       setError(err.response?.data?.message || "An error occurred");

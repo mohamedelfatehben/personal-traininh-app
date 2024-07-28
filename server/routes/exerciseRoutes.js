@@ -5,6 +5,7 @@ const {
   getExerciseById,
   updateExercise,
   deleteExercise,
+  getAllExercises,
 } = require("../controllers/exerciseController");
 const { trainerAuth } = require("../middlewares/authMiddleware");
 const router = express.Router();
@@ -18,6 +19,10 @@ router.post("/", trainerAuth, createExercise);
 // @desc    Get all exercises
 // @access  Private (trainer and admin)
 router.get("/", trainerAuth, getExercises);
+// @route   GET api/exercises
+// @desc    Get all exercises
+// @access  Private (trainer and admin)
+router.get("/all-exercises", trainerAuth, getAllExercises);
 
 // @route   GET api/exercises/:id
 // @desc    Get exercise by ID

@@ -1,10 +1,17 @@
 const Plan = require("../models/Plan");
 
 exports.createPlan = async (req, res) => {
-  const { name, type, description, price, paymentType } = req.body;
+  const { name, type, description, price, paymentType, days } = req.body;
 
   try {
-    const plan = new Plan({ name, type, description, price, paymentType });
+    const plan = new Plan({
+      name,
+      type,
+      description,
+      price,
+      paymentType,
+      days,
+    });
     await plan.save();
     res.json(plan);
   } catch (err) {
@@ -14,7 +21,7 @@ exports.createPlan = async (req, res) => {
 };
 
 exports.updatePlan = async (req, res) => {
-  const { name, type, description, price } = req.body;
+  const { name, type, description, price, paymentType, days } = req.body;
 
   try {
     const plan = await Plan.findById(req.params.id);
@@ -23,6 +30,8 @@ exports.updatePlan = async (req, res) => {
       plan.type = type || plan.type;
       plan.description = description || plan.description;
       plan.price = price || plan.price;
+      plan.paymentType = paymentType || plan.paymentType;
+      plan.days = paymentType === "by day" ? days || plan.days : plan.days;
       await plan.save();
       return res.json(plan);
     }

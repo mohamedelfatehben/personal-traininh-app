@@ -1,4 +1,7 @@
 import "./App.css";
+import "react-toastify/dist/ReactToastify.css";
+import "react-calendar/dist/Calendar.css";
+
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,9 +9,12 @@ import Login from "./pages/Login";
 import Signup from "./pages/SignUp";
 import { getUserApi } from "./api/auth";
 import { logoutUser, setUserInfo } from "./redux/user";
-import Navbar from "./components/common/Navbar";
-import Home from "./pages/trainee/Home";
 import MultiStepModal from "./components/trainee/MultiStepForm";
+import ProfilePage from "./pages/trainee/ProfilePage";
+import ClientDashboard from "./pages/trainee/Dashboard";
+import AdminDashboard from "./pages/trainer/Dashboard";
+import Programs from "./pages/trainer/Programs";
+import PlansSection from "./components/trainer/plans/PlansSection";
 
 function App() {
   const dispatch = useDispatch();
@@ -25,17 +31,27 @@ function App() {
           const userData = response.data;
           dispatch(
             setUserInfo({
-              id: userData._id,
+              id: userData.id,
               name: userData.name,
               role: userData.role,
               age: userData.age,
               height: userData.height,
               weight: userData.weight,
+              budget: userData.budget,
+              trainingFrequency: userData.trainingFrequency,
+              foodAllergies:
+                userData.foodAllergies?.length > 0
+                  ? [...userData.foodAllergies]
+                  : [],
               fitnessGoals: userData.fitnessGoals,
+              plan: userData.currentPlan || null,
+              subscriptionEnd: userData.subscriptionEnd || "",
+              nextPayment: userData.nextPayment ? userData.nextPayment : null,
             })
           );
-
-          // Check if the user is a trainee and has incomplete profile data
+          if (!userData.nextPayment) {
+            window.localStorage.setItem("nextPayment", "");
+          }
           if (
             userData.role === "trainee" &&
             (!userData.age ||
@@ -51,20 +67,17 @@ function App() {
           }
         }
       } catch (error) {
-        window.localStorage.setItem("token", "");
-        window.localStorage.setItem("name", "");
-        window.localStorage.setItem("role", "");
+        window.localStorage.clear();
         dispatch(logoutUser());
         console.log(error);
       }
     };
 
     fetchUserData();
-  }, [user.token]);
+  }, [user.token, dispatch]);
 
   return (
     <BrowserRouter>
-      <Navbar />
       {openDataModel && (
         <MultiStepModal
           isOpen={openDataModel}
@@ -83,9 +96,18 @@ function App() {
         {user.token ? (
           <>
             {user.role === "trainer" && (
-              <Route path="/" element={<div>Trainer Dashboard</div>} />
+              <>
+                <Route path="/" element={<AdminDashboard />} />
+                <Route path="/programs" element={<Programs />} />
+                <Route path="/plans" element={<PlansSection />} />
+              </>
             )}
-            {user.role === "trainee" && <Route path="/" element={<Home />} />}
+            {user.role === "trainee" && (
+              <>
+                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/" element={<ClientDashboard />} />
+              </>
+            )}
           </>
         ) : (
           <>

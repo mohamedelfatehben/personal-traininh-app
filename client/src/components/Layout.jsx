@@ -1,9 +1,10 @@
 /* eslint-disable react/prop-types */
-import Navbar from "./Navbar";
+
+import Navbar from "./common/Navbar";
 
 function Layout({ children }) {
   return (
-    <div className="flex items-end flex-col min-h-screen">
+    <div className="flex flex-col w-screen overflow-x-hidden bg-gray-100 pt-24 min-h-screen">
       <Navbar />
       {children}
     </div>

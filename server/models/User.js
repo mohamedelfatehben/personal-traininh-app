@@ -19,6 +19,7 @@ const UserSchema = new mongoose.Schema({
   },
   currentPlan: { type: mongoose.Schema.Types.ObjectId, ref: "Plan" },
   currentPayment: { type: mongoose.Schema.Types.ObjectId, ref: "Payment" },
+  nextPayment: { type: mongoose.Schema.Types.ObjectId, ref: "Payment" },
   subscriptionEnd: { type: Date },
 });
 

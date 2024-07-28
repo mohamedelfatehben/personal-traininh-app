@@ -8,7 +8,6 @@ const userRoutes = require("./routes/userRoutes");
 const planRoutes = require("./routes/planRoutes");
 const dailyProgramRoutes = require("./routes/dailyProgramRoutes");
 const exerciseRoutes = require("./routes/exerciseRoutes");
-const mealRoutes = require("./routes/mealRoutes");
 const programRoutes = require("./routes/programRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 
@@ -25,7 +24,6 @@ app.use("/api/users", userRoutes);
 app.use("/api/plans", planRoutes);
 app.use("/api/daily-programs", dailyProgramRoutes);
 app.use("/api/exercises", exerciseRoutes);
-app.use("/api/meals", mealRoutes);
 app.use("/api/programs", programRoutes);
 app.use("/api/payments", paymentRoutes);
 

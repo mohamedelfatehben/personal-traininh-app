@@ -34,11 +34,21 @@ exports.updateProgram = async (req, res) => {
 };
 
 exports.getPrograms = async (req, res) => {
+  const { page = 1, limit = 10 } = req.query;
+
   try {
-    const programs = await Program.find().populate(
-      "days.Monday days.Tuesday days.Wednesday days.Thursday days.Friday days.Saturday days.Sunday"
-    );
-    res.json(programs);
+    const programs = await Program.find()
+      .populate(
+        "days.Monday days.Tuesday days.Wednesday days.Thursday days.Friday days.Saturday days.Sunday"
+      )
+      .limit(Number(limit))
+      .skip((page - 1) * Number(limit))
+      .exec();
+
+    const count = await Program.countDocuments();
+    const totalPages = Math.ceil(count / limit);
+
+    res.json({ items: programs, totalPages });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");

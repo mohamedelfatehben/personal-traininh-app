@@ -2,12 +2,48 @@ const User = require("../models/User");
 const Program = require("../models/Program");
 const DailyProgram = require("../models/DailyProgram");
 const Exercise = require("../models/Exercise");
-const Nutrition = require("../models/Meal");
+const Plan = require("../models/Plan");
 
 // Get user profile
 exports.getUser = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("-password");
+    const user = await User.findById(req.user.id)
+      .select("-password")
+      .populate("currentPlan")
+      .populate("currentPayment")
+      .populate("nextPayment");
+
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    if (user.role === "trainee") {
+      const nextPaymentPlan = user.nextPayment
+        ? await Plan.findById(user.nextPayment.plan)
+        : null;
+
+      return res.json({
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        age: user.age,
+        height: user.height,
+        weight: user.weight,
+        trainingFrequency: user.trainingFrequency,
+        foodAllergies: user.foodAllergies,
+        budget: user.budget,
+        fitnessGoals: user.fitnessGoals,
+        gender: user.gender,
+        role: user.role,
+        currentPlan: user.currentPlan ? user.currentPlan : null,
+        currentPayment: user.currentPayment ? user.currentPayment : null,
+        subscriptionEnd: user.subscriptionEnd,
+        nextPayment: user.nextPayment
+          ? { ...user.nextPayment._doc, plan: nextPaymentPlan }
+          : null,
+      });
+    }
+
     res.json(user);
   } catch (err) {
     console.error(err.message);
@@ -53,6 +89,7 @@ exports.updateUser = async (req, res) => {
   }
 };
 
+// Assign a program to a trainee
 exports.assignProgram = async (req, res) => {
   const { userId, programId, programData } = req.body;
 
@@ -79,37 +116,22 @@ exports.assignProgram = async (req, res) => {
           days[day] = dailyProgramData._id;
         } else {
           // Process exercises and meals for new daily program
-          const exerciseIds = [];
-          const mealIds = [];
-
-          for (const exercise of dailyProgramData.exercises) {
+          const exerciseIds = dailyProgramData.exercises.map((exercise) => {
             if (exercise._id) {
-              // Use existing exercise
-              exerciseIds.push(exercise._id);
+              return exercise._id;
             } else {
-              // Create new exercise
               const newExercise = new Exercise(exercise);
-              await newExercise.save();
-              exerciseIds.push(newExercise._id);
+              newExercise.save();
+              return newExercise._id;
             }
-          }
-
-          for (const meal of dailyProgramData.meals) {
-            if (meal._id) {
-              // Use existing meal
-              mealIds.push(meal._id);
-            } else {
-              // Create new meal
-              const newMeal = new Nutrition(meal);
-              await newMeal.save();
-              mealIds.push(newMeal._id);
-            }
-          }
+          });
 
           // Create new daily program
           const newDailyProgram = new DailyProgram({
+            name: dailyProgramData.name,
             exercises: exerciseIds,
-            meals: mealIds,
+            meals: dailyProgramData.meals,
+            calories: dailyProgramData.calories,
           });
           await newDailyProgram.save();
           days[day] = newDailyProgram._id;
@@ -139,24 +161,64 @@ exports.assignProgram = async (req, res) => {
   }
 };
 
+// Get all trainees
 exports.getAllTrainees = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
+    const search = req.query.search || "";
+    const filterStatus = req.query.filterStatus || "";
+    const filterNextPaymentStatus = req.query.filterNextPaymentStatus || "";
+    const filterPlan = req.query.filterPlan || "";
     const skip = (page - 1) * limit;
 
-    const trainees = await User.find({ role: "trainee" })
+    const query = { role: "trainee" };
+
+    if (search) {
+      query.name = { $regex: search, $options: "i" };
+    }
+
+    if (filterStatus) {
+      query.subscriptionEnd =
+        filterStatus === "active" ? { $gt: new Date() } : { $lte: new Date() };
+    }
+
+    if (filterPlan) {
+      query.currentPlan = filterPlan;
+    }
+
+    const trainees = await User.find(query)
+      .populate("currentPlan")
+      .populate("currentPayment")
+      .populate({
+        path: "nextPayment",
+        populate: {
+          path: "plan",
+        },
+      })
       .skip(skip)
       .limit(limit)
-      .select("-password"); // Exclude password field
+      .select("-password");
 
-    const totalTrainees = await User.countDocuments({ role: "trainee" });
-
-    res.json({
-      trainees,
-      totalPages: Math.ceil(totalTrainees / limit),
-      currentPage: page,
-    });
+    if (filterNextPaymentStatus) {
+      const filteredTrainees = trainees.filter(
+        (trainee) =>
+          trainee.nextPayment &&
+          trainee.nextPayment.status === filterNextPaymentStatus
+      );
+      res.json({
+        trainees: filteredTrainees,
+        totalPages: Math.ceil(filteredTrainees.length / limit),
+        currentPage: page,
+      });
+    } else {
+      const totalTrainees = await User.countDocuments(query);
+      res.json({
+        trainees,
+        totalPages: Math.ceil(totalTrainees / limit),
+        currentPage: page,
+      });
+    }
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
