@@ -5,8 +5,10 @@ import { FaCheckCircle, FaTimesCircle, FaEye, FaClock } from "react-icons/fa";
 import Layout from "../../components/Layout";
 import UserModal from "../../components/trainer/UserModal";
 import NextPaymentModal from "../../components/trainer/NextPaymentModal";
+import ProgramModal from "../../components/trainer/ProgramModal";
 import Pagination from "../../components/common/Pagination";
 import { useSelector } from "react-redux";
+import Excerpted from "../../components/common/Excerepted";
 
 const TrainerDashboard = () => {
   const user = useSelector((state) => state.authReducer);
@@ -18,6 +20,7 @@ const TrainerDashboard = () => {
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [isProgramModalOpen, setIsProgramModalOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
   const [filterNextPaymentStatus, setFilterNextPaymentStatus] = useState("");
@@ -109,14 +112,33 @@ const TrainerDashboard = () => {
     setIsPaymentModalOpen(false);
   };
 
+  const openProgramModal = (user) => {
+    setSelectedUser(user);
+    setIsProgramModalOpen(true);
+  };
+
+  const closeProgramModal = () => {
+    setSelectedUser(null);
+    setIsProgramModalOpen(false);
+  };
+
   const handlePageChange = (newPage) => {
     setPage(newPage);
+  };
+
+  const handleProgramSave = (program) => {
+    const updatedUser = { ...selectedUser, program };
+    const updatedTrainees = trainees.map((trainee) =>
+      trainee._id === updatedUser._id ? updatedUser : trainee
+    );
+    setTrainees(updatedTrainees);
+    closeProgramModal();
   };
 
   return (
     <Layout>
       <div className="p-4 md:p-6 bg-gray-100 min-h-screen">
-        <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-indigo-700 ">
+        <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-indigo-700">
           Trainer Dashboard
         </h2>
         <div className="bg-white shadow-lg rounded-lg p-4 md:p-6 mb-4 md:mb-8">
@@ -180,6 +202,7 @@ const TrainerDashboard = () => {
                   <th className="py-2 px-4 border-b text-nowrap">
                     Next Payment Status
                   </th>
+                  <th className="py-2 px-4 border-b text-nowrap">Program</th>
                   <th className="py-2 px-4 border-b text-nowrap">Actions</th>
                 </tr>
               </thead>
@@ -188,10 +211,16 @@ const TrainerDashboard = () => {
                   <tr key={trainee._id}>
                     <td className="py-2 px-4 border-b">{trainee.name}</td>
                     <td className="py-2 px-4 border-b">{trainee.email}</td>
-                    <td className="py-2 px-4 border-b">
-                      {trainee.currentPlan
-                        ? trainee.currentPlan.name
-                        : "No Plan"}
+                    <td className="py-2 px-4 border-b text-nowrap">
+                      {trainee.currentPlan ? (
+                        <Excerpted
+                          text={trainee.currentPlan.name}
+                          length={16}
+                          bottom={true}
+                        />
+                      ) : (
+                        "No Plan"
+                      )}
                     </td>
                     <td className="py-2 px-4 border-b">
                       {trainee.subscriptionEnd
@@ -237,6 +266,23 @@ const TrainerDashboard = () => {
                       )}
                     </td>
                     <td className="py-2 px-4 border-b">
+                      {trainee.program ? (
+                        <button
+                          className="text-indigo-600 hover:text-indigo-800 flex items-center"
+                          onClick={() => openProgramModal(trainee)}
+                        >
+                          {trainee.program.name}
+                        </button>
+                      ) : (
+                        <button
+                          className="bg-indigo-500 text-white py-2 px-4 rounded hover:bg-indigo-700 text-nowrap"
+                          onClick={() => openProgramModal(trainee)}
+                        >
+                          Assign Program
+                        </button>
+                      )}
+                    </td>
+                    <td className="py-2 px-4 border-b">
                       <button
                         className="text-indigo-600 hover:text-indigo-800 flex items-center mr-4"
                         onClick={() => openUserModal(trainee)}
@@ -272,6 +318,12 @@ const TrainerDashboard = () => {
           newTrainees[index] = { ...trainee };
           setTrainees([...newTrainees]);
         }}
+      />
+      <ProgramModal
+        isOpen={isProgramModalOpen}
+        closeModal={closeProgramModal}
+        user={selectedUser}
+        onSave={handleProgramSave}
       />
     </Layout>
   );

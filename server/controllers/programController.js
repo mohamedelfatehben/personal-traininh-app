@@ -1,5 +1,4 @@
 const Program = require("../models/Program");
-const DailyProgram = require("../models/DailyProgram");
 
 exports.createProgram = async (req, res) => {
   const { name, description, days } = req.body;
@@ -49,6 +48,24 @@ exports.getPrograms = async (req, res) => {
     const totalPages = Math.ceil(count / limit);
 
     res.json({ items: programs, totalPages });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};
+
+exports.getAllPrograms = async (req, res) => {
+  try {
+    const programs = await Program.find()
+      .populate({
+        path: "days.Monday days.Tuesday days.Wednesday days.Thursday days.Friday days.Saturday days.Sunday",
+        populate: {
+          path: "exercises",
+          model: "Exercise",
+        },
+      })
+      .exec();
+    res.json(programs);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");

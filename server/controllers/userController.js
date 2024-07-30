@@ -11,7 +11,8 @@ exports.getUser = async (req, res) => {
       .select("-password")
       .populate("currentPlan")
       .populate("currentPayment")
-      .populate("nextPayment");
+      .populate("nextPayment")
+      .populate("program");
 
     if (!user) {
       return res.status(404).json({ msg: "User not found" });
@@ -41,6 +42,7 @@ exports.getUser = async (req, res) => {
         nextPayment: user.nextPayment
           ? { ...user.nextPayment._doc, plan: nextPaymentPlan }
           : null,
+        program: user.program,
       });
     }
 
@@ -196,6 +198,7 @@ exports.getAllTrainees = async (req, res) => {
           path: "plan",
         },
       })
+      .populate("program")
       .skip(skip)
       .limit(limit)
       .select("-password");

@@ -26,10 +26,8 @@ export const getAllTraineesApi = async (
   });
 };
 
-export const assignProgramApi = async (token, formData) => {
-  return axios.post(`${API_URL}/api/users/assign-program`, formData, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+export const assignProgramApi = async (data, token) => {
+  return axios.post(`${API_URL}/api/users/assign-program`, data, {
+    headers: { Authorization: `Bearer ${token}` },
   });
 };

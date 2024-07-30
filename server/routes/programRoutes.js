@@ -4,8 +4,13 @@ const {
   updateProgram,
   getPrograms,
   deleteProgram,
+  getAllPrograms,
 } = require("../controllers/programController");
-const { trainerAuth, adminAuth } = require("../middlewares/authMiddleware");
+const {
+  trainerAuth,
+  adminAuth,
+  auth,
+} = require("../middlewares/authMiddleware");
 const router = express.Router();
 
 // @route   POST api/programs
@@ -22,6 +27,11 @@ router.put("/:id", trainerAuth, updateProgram);
 // @desc    Get all programs
 // @access  Private (trainer and admin)
 router.get("/", trainerAuth, getPrograms);
+
+// @route   GET api/programs/all
+// @desc    Get all programs without pagination
+// @access  Public
+router.get("/all", auth, getAllPrograms);
 
 // @route   DELETE api/programs/:id
 // @desc    Delete a program

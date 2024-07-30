@@ -11,6 +11,12 @@ export const getProgramsApi = async (page, limit, token) => {
   });
 };
 
+export const getAllProgramsApi = async (token) => {
+  return axios.get(`${API_URL}/api/programs/all`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+
 export const createProgramApi = async (program, token) => {
   return axios.post(`${API_URL}/api/programs`, program, {
     headers: {

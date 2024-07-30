@@ -55,9 +55,30 @@ const DailyProgramModal = ({
     }
   }, [dailyProgram]);
 
+  const addMeal = () => {
+    if (editingMealIndex !== null) {
+      const updatedMeals = meals.map((meal, index) =>
+        index === editingMealIndex ? mealInput : meal
+      );
+      setMeals(updatedMeals);
+      setEditingMealIndex(null);
+    } else {
+      if (mealInput.meal && mealInput.quantity) {
+        setMeals([...meals, mealInput]);
+      } else {
+        setError("Meal name and quantity are required");
+      }
+    }
+    setMealInput({ meal: "", quantity: "" });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    // Ensure the current meal input is added to the meals list before saving
+    if (mealInput.meal !== "" && mealInput.quantity !== "") {
+      setMeals([...meals, mealInput]);
+    }
     if (!name) {
       setError("Program name is required");
       return;
@@ -66,18 +87,22 @@ const DailyProgramModal = ({
       setError("At least one exercise is required");
       return;
     }
-    if (meals.length === 0) {
-      setError("At least one meal is required");
-      return;
-    }
     if (calories <= 0) {
       setError("Calories must be a positive number");
       return;
     }
 
+    const filteredMeals = meals.filter((meal) => meal.meal && meal.quantity);
+
     setIsSubmitting(true);
     try {
-      await saveDailyProgram({ name, exercises, meals, calories: +calories });
+      await saveDailyProgram({
+        name,
+        exercises,
+        meals: filteredMeals,
+        calories: +calories,
+      });
+      close();
     } catch (error) {
       setError("Failed to save daily program");
     } finally {
@@ -103,23 +128,6 @@ const DailyProgramModal = ({
     setMealInput({ ...mealInput, [field]: value });
   };
 
-  const addMeal = () => {
-    if (editingMealIndex !== null) {
-      const updatedMeals = meals.map((meal, index) =>
-        index === editingMealIndex ? mealInput : meal
-      );
-      setMeals(updatedMeals);
-      setEditingMealIndex(null);
-    } else {
-      if (mealInput.meal && mealInput.quantity) {
-        setMeals([...meals, mealInput]);
-      } else {
-        setError("Meal name and quantity are required");
-      }
-    }
-    setMealInput({ meal: "", quantity: "" });
-  };
-
   const editMeal = (index) => {
     setMealInput(meals[index]);
     setEditingMealIndex(index);
@@ -132,14 +140,17 @@ const DailyProgramModal = ({
   const removeExercise = (index) => {
     setExercises(exercises.filter((_, i) => i !== index));
   };
+
   const close = () => {
     setName("");
     setExercises([]);
     setMeals([]);
     setCalories(0);
     setError("");
+    setMealInput({ meal: "", quantity: "" });
     closeModal();
   };
+
   return (
     <Modal title="Daily Program" isOpen={isOpen} closeModal={close}>
       <form onSubmit={handleSubmit} className="gap-y-4">
@@ -176,7 +187,7 @@ const DailyProgramModal = ({
                   </option>
                 ))}
             </select>
-            <div className="mt-2 flex gap-x-1 gap-y-2">
+            <div className="mt-2 flex gap-x-1 gap-y-2 flex-wrap">
               {exercises.map((exercise, index) => (
                 <div
                   key={index}
@@ -222,7 +233,7 @@ const DailyProgramModal = ({
               {editingMealIndex !== null ? "Update Meal" : "Add Meal"}
             </button>
           </div>
-          <div className="mt-2 flex gap-x-1 gap-y-2">
+          <div className="mt-2 flex gap-x-1 gap-y-2 flex-wrap">
             {meals.map((meal, index) => (
               <div
                 key={index}

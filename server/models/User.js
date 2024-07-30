@@ -21,6 +21,7 @@ const UserSchema = new mongoose.Schema({
   currentPayment: { type: mongoose.Schema.Types.ObjectId, ref: "Payment" },
   nextPayment: { type: mongoose.Schema.Types.ObjectId, ref: "Payment" },
   subscriptionEnd: { type: Date },
+  program: { type: mongoose.Schema.Types.ObjectId, ref: "Program" },
 });
 
 module.exports = mongoose.model("User", UserSchema);
