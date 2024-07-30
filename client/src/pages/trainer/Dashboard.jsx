@@ -137,7 +137,7 @@ const TrainerDashboard = () => {
 
   return (
     <Layout>
-      <div className="p-4 md:p-6 bg-gray-100 min-h-screen">
+      <div className="p-4 md:p-6 bg-gray-100 w-screen">
         <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-indigo-700">
           Trainer Dashboard
         </h2>

@@ -38,17 +38,7 @@ const ProgramModal = ({ isOpen, closeModal, user, onSave }) => {
       setSelectedProgram(null);
     }
   }, [selectedProgramId, programs]);
-  useEffect(() => {
-    if (user && user.program) {
-      setSelectedProgramId(user.program._id);
-      setSelectedProgram(user.program);
-    }
-  }, [user]);
-  const close = () => {
-    setSelectedProgram(null);
-    setSelectedProgramId("");
-    closeModal();
-  };
+
   const handleAssignProgram = async () => {
     setLoading(true);
     setError("");
@@ -57,7 +47,7 @@ const ProgramModal = ({ isOpen, closeModal, user, onSave }) => {
         { userId: user._id, programId: selectedProgramId },
         authUser.token
       );
-      onSave(selectedProgram);
+      onSave(selectedProgram); // Call the onSave callback
       close();
     } catch (error) {
       setError("Failed to assign program");
@@ -72,15 +62,19 @@ const ProgramModal = ({ isOpen, closeModal, user, onSave }) => {
       [day]: !prevState[day],
     }));
   };
-
+  const close = () => {
+    setSelectedProgram(null);
+    setSelectedProgramId("");
+    closeModal();
+  };
   return (
     <Modal title="Assign Program" isOpen={isOpen} closeModal={close}>
       {error && <div className="text-red-500">{error}</div>}
-      <div className="grid grid-cols-1 gap-4 max-w-2xl pt-10">
+      <div className="grid grid-cols-1 gap-4 max-w-2xl pt-2">
         <select
           value={selectedProgramId}
           onChange={(e) => setSelectedProgramId(e.target.value)}
-          className="p-2 shadow-sm sm:text-sm border border-indigo-500 rounded-md w-fit mx-auto"
+          className="p-2 shadow-sm sm:text-sm border border-indigo-500 rounded-md"
         >
           <option value="">Select program</option>
           {programs.map((program) => (
@@ -90,7 +84,7 @@ const ProgramModal = ({ isOpen, closeModal, user, onSave }) => {
           ))}
         </select>
         {selectedProgram && (
-          <div className="mt-1 border-t border-gray-200 pt-4">
+          <div className="mt-4 border-t border-gray-200 pt-4">
             <h3 className="text-lg font-semibold text-indigo-700">
               {selectedProgram.name}
             </h3>

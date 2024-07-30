@@ -15,7 +15,6 @@ import Excerpted from "../../common/Excerepted";
 
 const PlansSection = () => {
   const user = useSelector((state) => state.authReducer);
-  console.log(user);
   const [plans, setPlans] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
@@ -34,8 +33,7 @@ const PlansSection = () => {
   const fetchPlans = async () => {
     setIsLoading(true);
     const { data } = await getPlansApi(user.token);
-    console.log(data);
-    setPlans(data);
+    setPlans(data.items);
     setTotalPages(data.totalPages);
     setIsLoading(false);
   };
@@ -83,7 +81,7 @@ const PlansSection = () => {
 
   return (
     <Layout>
-      <div className="p-4 md:p-6 bg-gray-100">
+      <div className="p-4 md:p-6 bg-gray-100 min-h-screen">
         <div className="bg-white shadow-lg w-full rounded-lg p-4 md:p-6 mb-4 md:mb-8">
           <div className="flex items-center mb-4">
             <FaCalendarDay className="text-indigo-600 text-2xl mr-2" />
@@ -122,7 +120,7 @@ const PlansSection = () => {
                   {plans?.map((plan) => (
                     <tr key={plan._id}>
                       <td className="py-2 px-4 border-b">
-                        <Excerpted text={plan.name} length={14} bottom={true} />{" "}
+                        <Excerpted text={plan.name} length={14} bottom={true} />
                       </td>
                       <td className="py-2 px-4 border-b">{plan.type}</td>
                       <td className="py-2 px-4 border-b">{plan.description}</td>

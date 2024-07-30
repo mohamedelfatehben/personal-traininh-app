@@ -11,6 +11,7 @@ import {
 } from "../../../api/trainer";
 import Spinner from "../../common/Spinner";
 import { useSelector } from "react-redux";
+import Excerpted from "../../common/Excerepted";
 
 const ExercisesSection = () => {
   const user = useSelector((state) => state.authReducer);
@@ -138,7 +139,13 @@ const ExercisesSection = () => {
                 <tr key={exercise._id}>
                   <td className="py-2 px-4 border-b">{exercise.name}</td>
                   <td className="py-2 px-4 border-b">{exercise.muscleGroup}</td>
-                  <td className="py-2 px-4 border-b">{exercise.description}</td>
+                  <td className="py-2 px-4 border-b">
+                    <Excerpted
+                      bottom={true}
+                      text={exercise.description}
+                      length={20}
+                    />
+                  </td>
                   <td className="py-2 px-4 border-b">
                     {renderVideo(exercise.videoUrl)}
                   </td>

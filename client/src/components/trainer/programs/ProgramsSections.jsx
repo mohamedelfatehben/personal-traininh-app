@@ -11,6 +11,7 @@ import {
 } from "../../../api/trainer";
 import Spinner from "../../common/Spinner";
 import { useSelector } from "react-redux";
+import Excerpted from "../../common/Excerepted";
 
 const ProgramsSection = () => {
   const user = useSelector((state) => state.authReducer);
@@ -112,7 +113,13 @@ const ProgramsSection = () => {
               {programs?.map((program) => (
                 <tr key={program._id}>
                   <td className="py-2 px-4 border-b">{program.name}</td>
-                  <td className="py-2 px-4 border-b">{program.description}</td>
+                  <td className="py-2 px-4 border-b">
+                    <Excerpted
+                      text={program.description}
+                      length={20}
+                      bottom={true}
+                    />
+                  </td>
                   <td className="py-2 px-4 border-b">
                     {Object.keys(program.days).map((day) => (
                       <div key={day}>

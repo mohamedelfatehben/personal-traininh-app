@@ -11,6 +11,7 @@ import {
 } from "../../../api/trainer";
 import Spinner from "../../common/Spinner";
 import { useSelector } from "react-redux";
+import Excerpted from "../../common/Excerepted";
 
 const DailyProgramsSection = () => {
   const user = useSelector((state) => state.authReducer);
@@ -103,7 +104,7 @@ const DailyProgramsSection = () => {
       </div>
       {isLoading ? (
         <div className="flex justify-center items-center h-32">
-          <Spinner />{" "}
+          <Spinner />
         </div>
       ) : (
         <div className="w-full overflow-x-auto">
@@ -124,9 +125,13 @@ const DailyProgramsSection = () => {
                 <tr key={program._id}>
                   <td className="py-2 px-4 border-b">{program.name}</td>
                   <td className="py-2 px-4 border-b">
-                    {program.exercises
-                      .map((exercise) => exercise.muscleGroup)
-                      .join(", ")}
+                    <Excerpted
+                      text={program.exercises
+                        .map((exercise) => exercise.muscleGroup)
+                        .join(", ")}
+                      length={20}
+                      bottom={true}
+                    />
                   </td>
                   <td className="py-2 px-4 border-b">{program.meals.length}</td>
                   <td className="py-2 px-4 border-b">{program.calories}</td>
