@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { FaEdit, FaTrash, FaCalendarDay, FaPlus } from "react-icons/fa";
 import PlanModal from "./PlanModal";
-import Pagination from "../../common/Pagination";
 import ConfirmationModal from "../../common/ConfirmationModal";
 import {
   createPlanApi,
@@ -20,21 +19,18 @@ const PlansSection = () => {
   const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [currentPlan, setCurrentPlan] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const [planToDelete, setPlanToDelete] = useState(null);
 
   useEffect(() => {
     if (user.token) {
-      fetchPlans(currentPage);
+      fetchPlans();
     }
-  }, [currentPage]);
+  }, [user.token]);
 
   const fetchPlans = async () => {
     setIsLoading(true);
     const { data } = await getPlansApi(user.token);
-    setPlans(data.items);
-    setTotalPages(data.totalPages);
+    setPlans(data);
     setIsLoading(false);
   };
 
@@ -44,7 +40,7 @@ const PlansSection = () => {
     } else {
       await createPlanApi(plan, user.token);
     }
-    fetchPlans(currentPage);
+    fetchPlans();
     setIsPlanModalOpen(false);
     setCurrentPlan(null);
   };
@@ -71,12 +67,8 @@ const PlansSection = () => {
 
   const handleDelete = async () => {
     await deletePlanApi(planToDelete._id, user.token);
-    fetchPlans(currentPage);
+    fetchPlans();
     closeConfirmationModal();
-  };
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
   };
 
   return (
@@ -144,11 +136,6 @@ const PlansSection = () => {
                   ))}
                 </tbody>
               </table>
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-              />
             </div>
           )}
           <PlanModal
