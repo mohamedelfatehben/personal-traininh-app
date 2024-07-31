@@ -47,6 +47,7 @@ function App() {
               plan: userData.currentPlan || null,
               subscriptionEnd: userData.subscriptionEnd || "",
               nextPayment: userData.nextPayment ? userData.nextPayment : null,
+              program: userData.program ? userData.program : null,
             })
           );
           if (!userData.nextPayment) {

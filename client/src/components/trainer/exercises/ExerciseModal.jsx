@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
+import { FaTimes } from "react-icons/fa";
 import Modal from "../../common/Modal";
 
 const ExerciseModal = ({ isOpen, closeModal, saveExercise, exercise }) => {
@@ -11,7 +12,10 @@ const ExerciseModal = ({ isOpen, closeModal, saveExercise, exercise }) => {
     exercise ? exercise.description : ""
   );
   const [videoUrl, setVideoUrl] = useState(exercise ? exercise.videoUrl : "");
-  const [image, setImage] = useState(exercise ? exercise.image : "");
+  const [imageFile, setImageFile] = useState(null);
+  const [previewImage, setPreviewImage] = useState(
+    exercise ? exercise.image : ""
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -20,21 +24,52 @@ const ExerciseModal = ({ isOpen, closeModal, saveExercise, exercise }) => {
       setMuscleGroup(exercise.muscleGroup);
       setDescription(exercise.description);
       setVideoUrl(exercise.videoUrl);
-      setImage(exercise.image);
+      setPreviewImage(exercise.image);
+      setImageFile(null);
     } else {
       setName("");
       setMuscleGroup("");
       setDescription("");
       setVideoUrl("");
-      setImage("");
+      setPreviewImage(null);
+      setImageFile(null);
     }
   }, [exercise]);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setPreviewImage(null);
+    setImageFile(null);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    await saveExercise({ name, muscleGroup, description, videoUrl, image });
-    setIsSubmitting(false);
+
+    const exerciseData = { name, muscleGroup, description, videoUrl };
+
+    if (imageFile) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        exerciseData.image = reader.result;
+        saveExercise(exerciseData).finally(() => setIsSubmitting(false));
+      };
+      reader.readAsDataURL(imageFile);
+    } else {
+      exerciseData.image = previewImage;
+      saveExercise(exerciseData).finally(() => setIsSubmitting(false));
+    }
   };
 
   return (
@@ -93,15 +128,31 @@ const ExerciseModal = ({ isOpen, closeModal, saveExercise, exercise }) => {
         </div>
         <div>
           <label className="block text-sm sm:text-base font-semibold text-indigo-700">
-            Image URL
+            Image
           </label>
-          <input
-            type="text"
-            value={image}
-            onChange={(e) => setImage(e.target.value)}
-            className="mt-1 p-2 block w-full shadow-sm sm:text-sm border border-indigo-500 rounded-md"
-            placeholder="Enter image URL"
-          />
+          {previewImage ? (
+            <div className="relative w-full max-w-xs mx-auto">
+              <img
+                src={previewImage}
+                alt="Preview"
+                className="w-full h-auto object-cover rounded-md"
+              />
+              <button
+                type="button"
+                className="absolute top-0 right-0 mt-2 mr-2 bg-white text-red-600 hover:text-red-800"
+                onClick={handleRemoveImage}
+              >
+                <FaTimes />
+              </button>
+            </div>
+          ) : (
+            <input
+              type="file"
+              onChange={handleImageChange}
+              className="mt-1 p-2 block w-full shadow-sm sm:text-sm border border-indigo-500 rounded-md"
+              accept="image/*"
+            />
+          )}
         </div>
         <div className="mt-6 flex justify-end space-x-4">
           <button

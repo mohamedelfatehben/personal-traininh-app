@@ -91,7 +91,7 @@ exports.deleteExercise = async (req, res) => {
       return res.status(404).json({ msg: "Exercise not found" });
     }
 
-    await exercise.remove();
+    await exercise.deleteOne();
     res.json({ msg: "Exercise removed" });
   } catch (err) {
     console.error(err.message);

@@ -1,16 +1,12 @@
-/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
-import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
-import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useSelector } from "react-redux";
 import {
-  FaBell,
   FaClipboardList,
   FaCalendarCheck,
-  FaUpload,
   FaEdit,
-  FaRegCalendarCheck,
+  FaDumbbell,
+  FaUtensils,
 } from "react-icons/fa";
 import PlanSelection from "../../components/trainee/PlanSelection";
 import PaymentModal from "../../components/trainee/PaymentModal";
@@ -18,8 +14,7 @@ import MultiStepForm from "../../components/trainee/MultiStepForm";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Layout from "../../components/Layout";
-
-const localizer = momentLocalizer(moment);
+import ExerciseModal from "../../components/trainee/ExerciseModal";
 
 const ClientDashboard = () => {
   const user = useSelector((state) => state.authReducer);
@@ -27,32 +22,43 @@ const ClientDashboard = () => {
   const [isUpdatePaymentModalOpen, setIsUpdatePaymentModalOpen] =
     useState(false);
   const [isMultiStepFormOpen, setIsMultiStepFormOpen] = useState(false);
+  const [isExerciseModalOpen, setIsExerciseModalOpen] = useState(false);
+  const [selectedExercise, setSelectedExercise] = useState(null);
+  const [selectedDay, setSelectedDay] = useState(moment().format("dddd"));
 
-  const plans = [
-    {
-      title: "Plan details for 22nd July",
-      start: new Date("2024-07-22"),
-      end: new Date("2024-07-22"),
-    },
-    {
-      title: "Plan details for 25th July",
-      start: new Date("2024-07-25"),
-      end: new Date("2024-07-25"),
-    },
-  ];
+  const handleExerciseClick = (exercise) => {
+    setSelectedExercise(exercise);
+    setIsExerciseModalOpen(true);
+  };
 
   const getDaysOfWeek = () => {
-    const today = moment();
-    const startOfWeek = today.startOf("week");
-    const days = [];
-
-    for (let i = 0; i < 7; i++) {
-      const day = startOfWeek.clone().add(i, "days");
-      days.push(day);
-    }
-
-    return days;
+    return [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ];
   };
+
+  const getExercisesForDay = (day) => {
+    const program = user.program;
+    if (program && program.days && program.days[day]) {
+      return program.days[day].exercises || [];
+    }
+    return [];
+  };
+
+  const getMealsForDay = (day) => {
+    const program = user.program;
+    if (program && program.days && program.days[day]) {
+      return program.days[day].meals || [];
+    }
+    return [];
+  };
+
   useEffect(() => {
     if (user.plan?.subscriptionEnd) {
       const subscriptionEnd = new Date(user.plan?.subscriptionEnd);
@@ -98,34 +104,117 @@ const ClientDashboard = () => {
 
         {user.plan?.subscriptionEnd &&
           new Date(user.plan?.subscriptionEnd) > new Date() && (
-            <div className="bg-white shadow-lg rounded-lg p-4 md:p-6 mb-4 md:mb-8">
-              <h3 className="text-xl md:text-2xl font-semibold mb-4 text-gray-700">
-                Current Plan
-              </h3>
-              <div className="text-gray-600 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="flex items-center">
-                  <FaClipboardList className="text-indigo-500 mr-2" />
-                  <p>
-                    <strong>Plan:</strong> {user.plan?.name}
-                  </p>
-                </div>
-                <div className="flex items-center">
-                  <FaCalendarCheck className="text-indigo-500 mr-2" />
-                  <p>
-                    <strong>Subscription End:</strong>{" "}
-                    {user.plan?.subscriptionEnd
-                      ? formatDate(user.plan?.subscriptionEnd)
-                      : "N/A"}
-                  </p>
-                </div>
-                <div className="flex items-center">
-                  <FaClipboardList className="text-indigo-500 mr-2" />
-                  <p>
-                    <strong>Description:</strong> {user.plan?.description}
-                  </p>
+            <>
+              <div className="bg-white shadow-lg rounded-lg p-4 md:p-6 mb-4 md:mb-8">
+                <h3 className="text-xl md:text-2xl font-semibold mb-4 text-gray-700">
+                  Current Plan
+                </h3>
+                <div className="text-gray-600 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="flex items-center">
+                    <FaClipboardList className="text-indigo-500 mr-2" />
+                    <p>
+                      <strong>Plan:</strong> {user.plan?.name}
+                    </p>
+                  </div>
+                  <div className="flex items-center">
+                    <FaCalendarCheck className="text-indigo-500 mr-2" />
+                    <p>
+                      <strong>Subscription End:</strong>{" "}
+                      {user.plan?.subscriptionEnd
+                        ? formatDate(user.plan?.subscriptionEnd)
+                        : "N/A"}
+                    </p>
+                  </div>
+                  <div className="flex items-center">
+                    <FaClipboardList className="text-indigo-500 mr-2" />
+                    <p>
+                      <strong>Description:</strong> {user.plan?.description}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
+              <div className="bg-white shadow-lg rounded-lg p-4 md:p-6 mb-4 md:mb-8">
+                <div className="flex justify-center gap-x-4 mb-4">
+                  {getDaysOfWeek().map((day) => (
+                    <button
+                      key={day}
+                      className={`py-2 px-4 rounded ${
+                        selectedDay === day
+                          ? "bg-indigo-600 text-white"
+                          : "bg-gray-300 text-gray-700"
+                      }`}
+                      onClick={() => setSelectedDay(day)}
+                    >
+                      {day} {day === moment().format("dddd") && "(Today)"}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="md:col-span-2">
+                    <h3 className="text-xl font-semibold mb-4 text-gray-700">
+                      Exercises
+                    </h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {getExercisesForDay(selectedDay).length > 0 ? (
+                        getExercisesForDay(selectedDay).map((exercise) => (
+                          <div
+                            key={exercise._id}
+                            className="p-4 bg-gray-100 rounded shadow cursor-pointer"
+                            onClick={() => handleExerciseClick(exercise)}
+                          >
+                            <FaDumbbell className="text-indigo-500 mb-2" />
+                            <p className="font-semibold text-gray-700">
+                              {exercise.name}
+                            </p>
+                            {exercise.image ? (
+                              <img
+                                src={exercise.image}
+                                alt={exercise.name}
+                                className="w-full h-32 object-cover mt-2 rounded"
+                              />
+                            ) : (
+                              <div className="w-full h-32 bg-gray-200 mt-2 rounded"></div>
+                            )}
+                          </div>
+                        ))
+                      ) : (
+                        <p className="text-gray-600">
+                          No exercises scheduled for {selectedDay}.
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {user.plan?.type === "exercise and nutrition" && (
+                    <div>
+                      <h3 className="text-xl font-semibold mb-4 text-gray-700">
+                        Meals
+                      </h3>
+                      <div className="grid grid-cols-1 gap-4">
+                        {getMealsForDay(selectedDay).length > 0 ? (
+                          getMealsForDay(selectedDay).map((meal) => (
+                            <div
+                              key={meal._id}
+                              className="p-4 bg-gray-100 rounded shadow"
+                            >
+                              <FaUtensils className="text-indigo-500 mb-2" />
+                              <p className="font-semibold text-gray-700">
+                                {meal.meal} {meal.quantity}
+                              </p>
+                            </div>
+                          ))
+                        ) : (
+                          <p className="text-gray-600">
+                            No meals scheduled for {selectedDay}.
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </>
           )}
 
         {user.nextPayment && user.nextPayment.status === "pending" && (
@@ -158,7 +247,7 @@ const ClientDashboard = () => {
                     className="bg-indigo-600 text-white py-2 px-4 rounded flex items-center"
                     onClick={() => setIsUpdatePaymentModalOpen(true)}
                   >
-                    <FaUpload className="mr-2" /> Update Payment Proof
+                    Update Payment Proof
                   </button>
                 </div>
               )}
@@ -196,7 +285,7 @@ const ClientDashboard = () => {
                     className="bg-indigo-600 text-white py-2 px-4 rounded flex items-center"
                     onClick={() => setIsUpdatePaymentModalOpen(true)}
                   >
-                    <FaUpload className="mr-2" /> Update Payment Proof
+                    Update Payment Proof
                   </button>
                 </div>
               )}
@@ -205,122 +294,27 @@ const ClientDashboard = () => {
         )}
 
         {user.plan?.subscriptionEnd &&
-        !user.nextPayment &&
-        new Date(user.plan?.subscriptionEnd) < new Date() ? (
-          <div>
-            <div className="bg-white shadow-lg rounded-lg p-4 md:p-6 mb-4 md:mb-8">
-              <h3 className="text-xl md:text-2xl font-semibold mb-4 text-red-700">
-                Your subscription has ended
-              </h3>
-              <p className="text-gray-600">
-                Your {user.plan?.name} plan has ended on{" "}
-                {formatDate(user.plan?.subscriptionEnd)}.
-              </p>
-              <button
-                className="mt-4 bg-indigo-600 text-white py-2 px-4 rounded"
-                onClick={() => setIsPaymentModalOpen(true)}
-              >
-                Renew Plan
-              </button>
-            </div>
-            <PlanSelection />
-          </div>
-        ) : user.plan && new Date(user.plan?.subscriptionEnd) > new Date() ? (
-          <>
-            <div className="flex flex-col md:flex-row">
-              <div className="bg-white shadow-lg rounded-lg p-4 md:p-6 mb-4 md:mb-8 md:w-3/4 md:mr-4">
-                <h3 className="text-xl md:text-2xl font-semibold mb-4 text-gray-700">
-                  Daily programs
+          !user.nextPayment &&
+          new Date(user.plan?.subscriptionEnd) < new Date() && (
+            <div>
+              <div className="bg-white shadow-lg rounded-lg p-4 md:p-6 mb-4 md:mb-8">
+                <h3 className="text-xl md:text-2xl font-semibold mb-4 text-red-700">
+                  Your subscription has ended
                 </h3>
-                <div className="block md:hidden">
-                  <div className="grid grid-cols-1 gap-4">
-                    {getDaysOfWeek().map((day) => {
-                      const isToday = day.isSame(moment(), "day");
-                      const plan = plans.find(
-                        (p) =>
-                          moment(p.start).format("YYYY-MM-DD") ===
-                          day.format("YYYY-MM-DD")
-                      );
-                      return (
-                        <div
-                          key={day.format("YYYY-MM-DD")}
-                          className={`p-4 rounded-md shadow-md ${
-                            isToday
-                              ? "bg-indigo-700 text-white"
-                              : plan
-                              ? "bg-indigo-500 text-white"
-                              : "bg-gray-200 text-gray-700"
-                          }`}
-                        >
-                          <div className="flex justify-between">
-                            <p className="font-semibold">
-                              {day.format("dddd")}
-                            </p>
-                            {isToday && (
-                              <p className="mt-2 flex items-center">
-                                <FaRegCalendarCheck className="mr-2" /> Today
-                              </p>
-                            )}
-                          </div>
-                          {plan ? (
-                            <a
-                              className="mt-2 bg-white text-indigo-500 py-1 px-3 rounded"
-                              href={`/daily-program/${day.format(
-                                "YYYY-MM-DD"
-                              )}`}
-                            >
-                              View Daily Program
-                            </a>
-                          ) : (
-                            <p className="mt-2">You have no program.</p>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-                <div className="hidden md:block">
-                  <Calendar
-                    localizer={localizer}
-                    events={plans}
-                    startAccessor="start"
-                    endAccessor="end"
-                    style={{ height: 500 }}
-                    onSelectEvent={(event) =>
-                      (window.location.href = `/daily-program/${moment(
-                        event.start
-                      ).format("YYYY-MM-DD")}`)
-                    }
-                    eventPropGetter={(event) => ({
-                      style: {
-                        backgroundColor: "#4F46E5", // Indigo for events
-                        color: "#FFFFFF", // White text for events
-                      },
-                    })}
-                  />
-                </div>
-              </div>
-              <div className="bg-white shadow-lg rounded-lg p-4 md:p-6 mb-4 md:mb-8 md:w-1/4 md:ml-4">
-                <h3 className="text-xl md:text-2xl font-semibold mb-4 text-gray-700">
-                  Notifications
-                </h3>
-                <ul className="list-none">
-                  <li className="mb-2">
-                    <FaBell className="text-indigo-500 mr-2 inline" />
-                    Your session on 12th July has been completed.
-                  </li>
-                  <li className="mb-2">
-                    <FaBell className="text-indigo-500 mr-2 inline" />
-                    Your session on 18th July is upcoming.
-                  </li>
-                </ul>
+                <p className="text-gray-600">
+                  Your {user.plan?.name} plan has ended on{" "}
+                  {formatDate(user.plan?.subscriptionEnd)}.
+                </p>
+                <button
+                  className="mt-4 bg-indigo-600 text-white py-2 px-4 rounded"
+                  onClick={() => setIsPaymentModalOpen(true)}
+                >
+                  Renew Plan
+                </button>
               </div>
             </div>
-            <PlanSelection />
-          </>
-        ) : (
-          <PlanSelection />
-        )}
+          )}
+        <PlanSelection />
       </div>
 
       {isMultiStepFormOpen && (
@@ -345,6 +339,14 @@ const ClientDashboard = () => {
           closeModal={() => setIsUpdatePaymentModalOpen(false)}
           plan={user.nextPayment?.plan}
           existingPayment={user.nextPayment} // Pass the existing payment details if available
+        />
+      )}
+
+      {isExerciseModalOpen && (
+        <ExerciseModal
+          isOpen={isExerciseModalOpen}
+          closeModal={() => setIsExerciseModalOpen(false)}
+          exercise={selectedExercise}
         />
       )}
     </Layout>

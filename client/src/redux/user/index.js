@@ -21,6 +21,9 @@ const initialState = {
   nextPayment: window.localStorage.getItem("nextPayment")
     ? JSON.parse(window.localStorage.getItem("nextPayment"))
     : null,
+  program: window.localStorage.getItem("program")
+    ? JSON.parse(window.localStorage.getItem("program"))
+    : null,
 };
 
 export const loginUser = (payload) => ({
@@ -43,6 +46,7 @@ export const setUserInfo = (payload) => {
     plan,
     subscriptionEnd,
     nextPayment,
+    program,
   } = payload;
   return {
     type: GET_INFO,
@@ -60,6 +64,7 @@ export const setUserInfo = (payload) => {
       plan,
       subscriptionEnd,
       nextPayment,
+      program,
     },
   };
 };
@@ -93,6 +98,7 @@ const authReducer = (state = initialState, action) => {
       window.localStorage.removeItem("planName");
       window.localStorage.removeItem("subscriptionEnd");
       window.localStorage.removeItem("nextPayment");
+      window.localStorage.removeItem("program");
       return {
         ...initialState,
         token: "",
@@ -111,6 +117,7 @@ const authReducer = (state = initialState, action) => {
           subscriptionEnd: "",
         },
         nextPayment: null,
+        program: null,
       };
     case GET_INFO:
       window.localStorage.setItem("name", action.payload.name);
@@ -140,6 +147,11 @@ const authReducer = (state = initialState, action) => {
           "nextPayment",
           JSON.stringify(action.payload.nextPayment)
         );
+      action.payload.program &&
+        window.localStorage.setItem(
+          "program",
+          JSON.stringify(action.payload.program)
+        );
       return {
         ...state,
         id: action.payload.id,
@@ -157,6 +169,7 @@ const authReducer = (state = initialState, action) => {
           subscriptionEnd: action.payload.subscriptionEnd,
         },
         nextPayment: action.payload.nextPayment,
+        program: action.payload.program,
       };
     default:
       return state;

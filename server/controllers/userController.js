@@ -12,7 +12,15 @@ exports.getUser = async (req, res) => {
       .populate("currentPlan")
       .populate("currentPayment")
       .populate("nextPayment")
-      .populate("program");
+      .populate({
+        path: "program",
+        populate: {
+          path: "days.Monday days.Tuesday days.Wednesday days.Thursday days.Friday days.Saturday days.Sunday",
+          populate: {
+            path: "exercises",
+          },
+        },
+      });
 
     if (!user) {
       return res.status(404).json({ msg: "User not found" });
