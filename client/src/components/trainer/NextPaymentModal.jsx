@@ -30,7 +30,7 @@ const NextPaymentModal = ({ isOpen, closeModal, payment, token, onUpdate }) => {
       onUpdate(updatedUser);
       closeModal();
     } catch (error) {
-      console.error("Failed to accept payment", error);
+      console.error("فشل في قبول الدفع", error);
     } finally {
       setIsLoading(false);
     }
@@ -48,30 +48,30 @@ const NextPaymentModal = ({ isOpen, closeModal, payment, token, onUpdate }) => {
       await onUpdate(updatedUser);
       closeModal();
     } catch (error) {
-      console.error("Failed to deny payment", error);
+      console.error("فشل في رفض الدفع", error);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <Modal title="Next Payment Details" isOpen={isOpen} closeModal={closeModal}>
+    <Modal title="تفاصيل الدفع القادم" isOpen={isOpen} closeModal={closeModal}>
       <div className="mt-4 max-w-4xl">
         <div className="bg-yellow-100 p-4 rounded-lg shadow-md">
           <p className="mt-2 flex items-center">
             <FaMoneyBillWave className="mr-2 text-yellow-500" />{" "}
-            <strong>Plan:</strong> {payment.plan.name}
+            <strong>الخطة:</strong> {payment.plan.name}
           </p>
           <p className="mt-2 flex items-center">
             <FaMoneyBillWave className="mr-2 text-yellow-500" />{" "}
-            <strong>Amount:</strong> {payment.amount} DA
+            <strong>المبلغ:</strong> {payment.amount} DA
           </p>
           {payment.image && (
             <div className="mt-4">
-              <strong>Payment Proof:</strong>
+              <strong>دليل الدفع:</strong>
               <img
                 src={`data:image/jpeg;base64,${payment.image}`}
-                alt="Payment Proof"
+                alt="دليل الدفع"
                 className="mt-2 rounded-lg shadow-md w-full max-w-sm h-auto"
               />
             </div>
@@ -90,7 +90,7 @@ const NextPaymentModal = ({ isOpen, closeModal, payment, token, onUpdate }) => {
             ) : (
               <FaCheckCircle className="mr-1" />
             )}
-            Accept
+            قبول
           </button>
           <button
             onClick={handleDeny}
@@ -104,18 +104,17 @@ const NextPaymentModal = ({ isOpen, closeModal, payment, token, onUpdate }) => {
             ) : (
               <FaTimesCircle className="mr-1" />
             )}
-            Deny
+            رفض
           </button>
           <button
             onClick={closeModal}
             className="bg-gray-600 text-white py-2 px-4 rounded hover:bg-gray-800 flex items-center"
           >
-            <FaTimes className="mr-1" /> Cancel
+            <FaTimes className="mr-1" /> إلغاء
           </button>
         </div>
       </div>
     </Modal>
   );
 };
-
 export default NextPaymentModal;

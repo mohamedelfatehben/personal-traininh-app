@@ -42,7 +42,7 @@ const PaymentModal = ({ isOpen, closeModal, plan, existingPayment }) => {
     setLoading(true);
 
     if (!image) {
-      setError("Image is required for remote payments");
+      setError("الصورة مطلوبة للمدفوعات عن بعد");
       setLoading(false);
       return;
     }
@@ -50,7 +50,7 @@ const PaymentModal = ({ isOpen, closeModal, plan, existingPayment }) => {
     try {
       const userId = window.localStorage.getItem("id");
       if (!userId) {
-        setError("User ID not found in local storage");
+        setError("لم يتم العثور على معرف المستخدم في التخزين المحلي");
         setLoading(false);
         return;
       }
@@ -76,7 +76,7 @@ const PaymentModal = ({ isOpen, closeModal, plan, existingPayment }) => {
         close();
       }, 3000);
     } catch (err) {
-      setError("Failed to submit payment");
+      setError("فشل في تقديم الدفع");
       console.error(err);
     } finally {
       setLoading(false);
@@ -96,10 +96,10 @@ const PaymentModal = ({ isOpen, closeModal, plan, existingPayment }) => {
     let endDate;
     switch (plan.paymentType) {
       case "monthly":
-        endDate = "one month";
+        endDate = "شهر واحد";
         break;
       case "by day":
-        endDate = `${plan.days} days`;
+        endDate = `${plan.days} أيام`;
         break;
       default:
         endDate = "";
@@ -111,22 +111,22 @@ const PaymentModal = ({ isOpen, closeModal, plan, existingPayment }) => {
     <Modal
       isOpen={isOpen}
       closeModal={closeModal}
-      title={existingPayment ? "Update Payment Proof" : "Submit Payment Proof"}
+      title={existingPayment ? "تحديث إثبات الدفع" : "إرسال إثبات الدفع"}
     >
       {success ? (
         <div className="mt-4 flex items-center text-green-600">
           <FaCheckCircle className="mr-2" />
-          Payment {existingPayment ? "updated" : "submitted"} successfully. It
-          will be confirmed soon.
+          تم {existingPayment ? "تحديث" : "إرسال"} الدفع بنجاح. سيتم تأكيده
+          قريباً.
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="max-w-sm">
           <div className="mt-4">
             <label className="block text-sm font-medium text-gray-700">
-              Plan: {plan.name}
+              الخطة: {plan.name}
             </label>
             <label className="block text-sm font-medium text-gray-700 mt-2">
-              Amount: {plan.price} DA
+              المبلغ: {plan.price} DA
             </label>
             {image ? (
               <div className="mt-2 relative">
@@ -136,7 +136,7 @@ const PaymentModal = ({ isOpen, closeModal, plan, existingPayment }) => {
                       ? image
                       : URL.createObjectURL(image)
                   }
-                  alt="Payment Proof"
+                  alt="إثبات الدفع"
                   className="w-full h-48 object-cover rounded-md"
                 />
                 <button
@@ -162,7 +162,7 @@ const PaymentModal = ({ isOpen, closeModal, plan, existingPayment }) => {
           </div>
           <div className="mt-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative flex items-center">
             <FaExclamationTriangle className="mr-2" />
-            Your payment will end after: {calculateEndDate()}
+            ستنتهي صلاحية دفعتك بعد: {calculateEndDate()}
           </div>
           <div className="mt-6 flex justify-end space-x-4">
             <button
@@ -170,7 +170,7 @@ const PaymentModal = ({ isOpen, closeModal, plan, existingPayment }) => {
               className="rounded-md bg-red-600 py-2 px-4 text-sm font-medium text-white hover:bg-red-700 flex items-center"
               onClick={close}
             >
-              <FaTimes className="mr-1" /> Cancel
+              <FaTimes className="mr-1" /> إلغاء
             </button>
             <button
               type="submit"
@@ -182,7 +182,7 @@ const PaymentModal = ({ isOpen, closeModal, plan, existingPayment }) => {
               ) : (
                 <FaCheckCircle className="mr-1" />
               )}
-              {loading ? "Submitting..." : "Submit"}
+              {loading ? "جاري التقديم..." : "إرسال"}
             </button>
           </div>
         </form>

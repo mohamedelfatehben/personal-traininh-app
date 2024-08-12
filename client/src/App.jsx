@@ -2,11 +2,10 @@ import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
 import "react-calendar/dist/Calendar.css";
 
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Login from "./pages/Login";
-import Signup from "./pages/SignUp";
 import { getUserApi } from "./api/auth";
 import { logoutUser, setUserInfo } from "./redux/user";
 import MultiStepModal from "./components/trainee/MultiStepForm";
@@ -15,13 +14,14 @@ import ClientDashboard from "./pages/trainee/Dashboard";
 import AdminDashboard from "./pages/trainer/Dashboard";
 import Programs from "./pages/trainer/Programs";
 import PlansSection from "./components/trainer/plans/PlansSection";
+import Home from "./pages/Home";
+import SignUp from "./pages/SignUp";
 
 function App() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.authReducer);
   const [openDataModel, setOpenDataModel] = useState(false);
   const [mustCompleteInfo, setMustCompleteInfo] = useState(false);
-
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -70,7 +70,7 @@ function App() {
       } catch (error) {
         window.localStorage.clear();
         dispatch(logoutUser());
-        console.log(error);
+        window.location("/");
       }
     };
 
@@ -90,15 +90,12 @@ function App() {
         />
       )}
       <Routes>
-        <Route
-          path="*"
-          element={<Navigate to={user.token ? "/" : "/login"} />}
-        />
+        <Route path="/" element={<Home />} />
         {user.token ? (
           <>
             {user.role === "trainer" && (
               <>
-                <Route path="/" element={<AdminDashboard />} />
+                <Route path="/dashboard" element={<AdminDashboard />} />
                 <Route path="/programs" element={<Programs />} />
                 <Route path="/plans" element={<PlansSection />} />
               </>
@@ -106,14 +103,14 @@ function App() {
             {user.role === "trainee" && (
               <>
                 <Route path="/profile" element={<ProfilePage />} />
-                <Route path="/" element={<ClientDashboard />} />
+                <Route path="/dashboard" element={<ClientDashboard />} />
               </>
             )}
           </>
         ) : (
           <>
             <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
+            <Route path="/sign-up" element={<SignUp />} />
           </>
         )}
       </Routes>

@@ -85,13 +85,13 @@ const ProgramsSection = () => {
       <div className="flex items-center mb-4">
         <FaCalendarDay className="text-indigo-600 text-2xl mr-2" />
         <h3 className="text-xl md:text-2xl font-semibold text-gray-700">
-          Manage Programs
+          إدارة البرامج
         </h3>
         <button
-          className="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-800 flex items-center ml-auto"
+          className="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-800 flex items-center mx-auto"
           onClick={() => openProgramModal()}
         >
-          <FaPlus className="mr-2" /> Add Program
+          <FaPlus className="mr-2" /> إضافة برنامج
         </button>
       </div>
       {isLoading ? (
@@ -103,10 +103,10 @@ const ProgramsSection = () => {
           <table className="min-w-full bg-white">
             <thead>
               <tr>
-                <th className="py-2 px-4 border-b text-left">Name</th>
-                <th className="py-2 px-4 border-b text-left">Description</th>
-                <th className="py-2 px-4 border-b text-left">Days</th>
-                <th className="py-2 px-4 border-b text-left">Actions</th>
+                <th className="py-2 px-4 border-b text-left">الاسم</th>
+                <th className="py-2 px-4 border-b text-left">الوصف</th>
+                <th className="py-2 px-4 border-b text-left">الأيام</th>
+                <th className="py-2 px-4 border-b text-left">الإجراءات</th>
               </tr>
             </thead>
             <tbody>
@@ -160,7 +160,7 @@ const ProgramsSection = () => {
       />
       <ConfirmationModal
         isOpen={isConfirmationModalOpen}
-        title="Program"
+        title="برنامج"
         onConfirm={handleDelete}
         onCancel={closeConfirmationModal}
       />

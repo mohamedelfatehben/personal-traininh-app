@@ -78,13 +78,13 @@ const PlansSection = () => {
           <div className="flex items-center mb-4">
             <FaCalendarDay className="text-indigo-600 text-2xl mr-2" />
             <h3 className="text-xl md:text-2xl font-semibold text-gray-700">
-              Manage Plans
+              إدارة الخطط
             </h3>
             <button
-              className="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-800 flex items-center ml-auto"
+              className="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-800 flex items-center mx-auto"
               onClick={() => openPlanModal()}
             >
-              <FaPlus className="mr-2" /> Add Plan
+              <FaPlus className="mr-2" /> إضافة خطة
             </button>
           </div>
           {isLoading ? (
@@ -96,16 +96,12 @@ const PlansSection = () => {
               <table className="min-w-full bg-white">
                 <thead>
                   <tr>
-                    <th className="py-2 px-4 border-b text-left">Name</th>
-                    <th className="py-2 px-4 border-b text-left">Type</th>
-                    <th className="py-2 px-4 border-b text-left">
-                      Description
-                    </th>
-                    <th className="py-2 px-4 border-b text-left">Price</th>
-                    <th className="py-2 px-4 border-b text-left">
-                      Payment Type
-                    </th>
-                    <th className="py-2 px-4 border-b text-left">Actions</th>
+                    <th className="py-2 px-4 border-b text-left">الاسم</th>
+                    <th className="py-2 px-4 border-b text-left">النوع</th>
+                    <th className="py-2 px-4 border-b text-left">الوصف</th>
+                    <th className="py-2 px-4 border-b text-left">السعر</th>
+                    <th className="py-2 px-4 border-b text-left">نوع الدفع</th>
+                    <th className="py-2 px-4 border-b text-left">الإجراءات</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -146,8 +142,8 @@ const PlansSection = () => {
           />
           <ConfirmationModal
             isOpen={isConfirmationModalOpen}
-            title="Delete Plan"
-            message={`Do you want to delete ${planToDelete?.name}?`}
+            title="حذف الخطة"
+            message={`هل تريد حذف ${planToDelete?.name}؟`}
             onConfirm={handleDelete}
             onCancel={closeConfirmationModal}
           />

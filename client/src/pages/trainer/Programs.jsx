@@ -11,7 +11,7 @@ const TrainerManagementPage = () => {
     <Layout>
       <div className="p-4 md:p-6 bg-gray-100 pt-28">
         <div className="flex flex-col md:flex-row md:justify-center gap-x-2 mb-6">
-          <div className="flex space-x-4 mb-4 md:mb-0">
+          <div className="flex gap-x-4 mb-4 md:mb-0">
             <button
               className={`py-2 px-4 rounded ${
                 section === "programs"
@@ -20,7 +20,7 @@ const TrainerManagementPage = () => {
               }`}
               onClick={() => setSection("programs")}
             >
-              Programs
+              البرامج
             </button>
             <button
               className={`py-2 px-4 rounded ${
@@ -30,7 +30,7 @@ const TrainerManagementPage = () => {
               }`}
               onClick={() => setSection("dailyPrograms")}
             >
-              Daily Programs
+              البرامج اليومية
             </button>
             <button
               className={`py-2 px-4 rounded ${
@@ -40,7 +40,7 @@ const TrainerManagementPage = () => {
               }`}
               onClick={() => setSection("exercises")}
             >
-              Exercises
+              التمارين
             </button>
           </div>
         </div>

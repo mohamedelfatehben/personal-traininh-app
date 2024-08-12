@@ -43,6 +43,19 @@ const ClientDashboard = () => {
     ];
   };
 
+  const getArabicDay = (day) => {
+    const days = {
+      Monday: "الاثنين",
+      Tuesday: "الثلاثاء",
+      Wednesday: "الأربعاء",
+      Thursday: "الخميس",
+      Friday: "الجمعة",
+      Saturday: "السبت",
+      Sunday: "الأحد",
+    };
+    return days[day] || day;
+  };
+
   const getExercisesForDay = (day) => {
     const program = user.program;
     if (program && program.days && program.days[day]) {
@@ -69,7 +82,7 @@ const ClientDashboard = () => {
 
       if (daysLeft > 0 && daysLeft <= 3) {
         toast.info(
-          `Your subscription will end in ${daysLeft} days. Please pay attention to that!`,
+          `ستنتهي اشتراكك في ${daysLeft} أيام. يرجى الانتباه إلى ذلك!`,
           {
             autoClose: 5000,
           }
@@ -83,12 +96,12 @@ const ClientDashboard = () => {
       <div className="p-4 md:p-6 bg-gray-100 min-h-screen">
         <ToastContainer />
         <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-indigo-700 underline">
-          Welcome, {user.name}!
+          مرحبًا، {user.name}!
         </h2>
         <p className="mb-4 md:mb-6 text-lg text-gray-800 font-semibold">
-          Welcome to our top-notch fitness service! Get ready to transform your
-          life with personalized plans and expert guidance. You can pay for your
-          plan via CCP or visit our office to make an on-site payment.
+          مرحبًا بك في خدمة اللياقة البدنية المتميزة لدينا! استعد لتحويل حياتك
+          بخطط مخصصة وتوجيهات خبراء. يمكنك دفع اشتراكك عبر CCP أو زيارة مكتبنا
+          للدفع الشخصي.
         </p>
 
         {user.gender === "" && (
@@ -97,7 +110,7 @@ const ClientDashboard = () => {
               className="bg-blue-600 text-white py-2 px-4 rounded flex items-center"
               onClick={() => setIsMultiStepFormOpen(true)}
             >
-              <FaEdit className="mr-2" /> Complete Your Profile
+              <FaEdit className="mr-2" /> أكمل ملفك الشخصي
             </button>
           </div>
         )}
@@ -107,19 +120,19 @@ const ClientDashboard = () => {
             <>
               <div className="bg-white shadow-lg rounded-lg p-4 md:p-6 mb-4 md:mb-8">
                 <h3 className="text-xl md:text-2xl font-semibold mb-4 text-gray-700">
-                  Current Plan
+                  الخطة الحالية
                 </h3>
                 <div className="text-gray-600 grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex items-center">
                     <FaClipboardList className="text-indigo-500 mr-2" />
                     <p>
-                      <strong>Plan:</strong> {user.plan?.name}
+                      <strong>الخطة:</strong> {user.plan?.name}
                     </p>
                   </div>
                   <div className="flex items-center">
                     <FaCalendarCheck className="text-indigo-500 mr-2" />
                     <p>
-                      <strong>Subscription End:</strong>{" "}
+                      <strong>نهاية الاشتراك:</strong>{" "}
                       {user.plan?.subscriptionEnd
                         ? formatDate(user.plan?.subscriptionEnd)
                         : "N/A"}
@@ -128,7 +141,7 @@ const ClientDashboard = () => {
                   <div className="flex items-center">
                     <FaClipboardList className="text-indigo-500 mr-2" />
                     <p>
-                      <strong>Description:</strong> {user.plan?.description}
+                      <strong>الوصف:</strong> {user.plan?.description}
                     </p>
                   </div>
                 </div>
@@ -145,7 +158,8 @@ const ClientDashboard = () => {
                       }`}
                       onClick={() => setSelectedDay(day)}
                     >
-                      {day} {day === moment().format("dddd") && "(Today)"}
+                      {getArabicDay(day)}{" "}
+                      {day === moment().format("dddd") && "(اليوم)"}
                     </button>
                   ))}
                 </div>
@@ -153,7 +167,7 @@ const ClientDashboard = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="md:col-span-2">
                     <h3 className="text-xl font-semibold mb-4 text-gray-700">
-                      Exercises
+                      التمارين
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                       {getExercisesForDay(selectedDay).length > 0 ? (
@@ -180,7 +194,7 @@ const ClientDashboard = () => {
                         ))
                       ) : (
                         <p className="text-gray-600">
-                          No exercises scheduled for {selectedDay}.
+                          لا توجد تمارين مجدولة لـ {getArabicDay(selectedDay)}.
                         </p>
                       )}
                     </div>
@@ -189,7 +203,7 @@ const ClientDashboard = () => {
                   {user.plan?.type === "exercise and nutrition" && (
                     <div>
                       <h3 className="text-xl font-semibold mb-4 text-gray-700">
-                        Meals
+                        الوجبات
                       </h3>
                       <div className="grid grid-cols-1 gap-4">
                         {getMealsForDay(selectedDay).length > 0 ? (
@@ -206,7 +220,7 @@ const ClientDashboard = () => {
                           ))
                         ) : (
                           <p className="text-gray-600">
-                            No meals scheduled for {selectedDay}.
+                            لا توجد وجبات مجدولة لـ {getArabicDay(selectedDay)}.
                           </p>
                         )}
                       </div>
@@ -222,32 +236,32 @@ const ClientDashboard = () => {
             className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 md:p-6 mb-4 md:mb-8"
             role="alert"
           >
-            <p className="font-bold">Payment Processing</p>
+            <p className="font-bold">جاري معالجة الدفع</p>
             <p>
-              Your payment is currently being processed by the trainer. You will
-              be notified once it is confirmed.
+              يتم حاليًا معالجة دفعتك بواسطة المدرب. ستتلقى إشعارًا بمجرد
+              تأكيده.
             </p>
             <div className="flex flex-col md:flex-row items-center justify-between mt-4">
               <div className="flex flex-col">
                 <p>
-                  <strong>Plan:</strong> {user.nextPayment.plan.name}
+                  <strong>الخطة:</strong> {user.nextPayment.plan.name}
                 </p>
                 <p>
-                  <strong>Amount:</strong> ${user.nextPayment.amount}
+                  <strong>المبلغ:</strong> ${user.nextPayment.amount}
                 </p>
               </div>
               {user.nextPayment.image && (
                 <div className="flex items-center mt-4 md:mt-0">
                   <img
                     src={`data:image/jpeg;base64,${user.nextPayment.image}`}
-                    alt="Payment Proof"
+                    alt="إثبات الدفع"
                     className="w-32 h-32 rounded-lg shadow-lg mr-4"
                   />
                   <button
                     className="bg-indigo-600 text-white py-2 px-4 rounded flex items-center"
                     onClick={() => setIsUpdatePaymentModalOpen(true)}
                   >
-                    Update Payment Proof
+                    تحديث إثبات الدفع
                   </button>
                 </div>
               )}
@@ -260,32 +274,31 @@ const ClientDashboard = () => {
             className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 md:p-6 mb-4 md:mb-8"
             role="alert"
           >
-            <p className="font-bold">Payment Denied</p>
+            <p className="font-bold">تم رفض الدفع</p>
             <p>
-              Unfortunately, your payment was denied. Please update your payment
-              proof or contact support.
+              لسوء الحظ، تم رفض دفعتك. يرجى تحديث إثبات الدفع أو الاتصال بالدعم.
             </p>
             <div className="flex flex-col md:flex-row items-center justify-between mt-4">
               <div className="flex flex-col">
                 <p>
-                  <strong>Plan:</strong> {user.nextPayment.plan.name}
+                  <strong>الخطة:</strong> {user.nextPayment.plan.name}
                 </p>
                 <p>
-                  <strong>Amount:</strong> ${user.nextPayment.amount}
+                  <strong>المبلغ:</strong> ${user.nextPayment.amount}
                 </p>
               </div>
               {user.nextPayment.image && (
                 <div className="flex items-center mt-4 md:mt-0">
                   <img
                     src={`data:image/jpeg;base64,${user.nextPayment.image}`}
-                    alt="Payment Proof"
+                    alt="إثبات الدفع"
                     className="w-32 h-32 rounded-lg shadow-lg mr-4"
                   />
                   <button
                     className="bg-indigo-600 text-white py-2 px-4 rounded flex items-center"
                     onClick={() => setIsUpdatePaymentModalOpen(true)}
                   >
-                    Update Payment Proof
+                    تحديث إثبات الدفع
                   </button>
                 </div>
               )}
@@ -299,17 +312,17 @@ const ClientDashboard = () => {
             <div>
               <div className="bg-white shadow-lg rounded-lg p-4 md:p-6 mb-4 md:mb-8">
                 <h3 className="text-xl md:text-2xl font-semibold mb-4 text-red-700">
-                  Your subscription has ended
+                  انتهت اشتراكك
                 </h3>
                 <p className="text-gray-600">
-                  Your {user.plan?.name} plan has ended on{" "}
+                  انتهت خطة {user.plan?.name} الخاصة بك في{" "}
                   {formatDate(user.plan?.subscriptionEnd)}.
                 </p>
                 <button
                   className="mt-4 bg-indigo-600 text-white py-2 px-4 rounded"
                   onClick={() => setIsPaymentModalOpen(true)}
                 >
-                  Renew Plan
+                  تجديد الخطة
                 </button>
               </div>
             </div>
@@ -329,7 +342,7 @@ const ClientDashboard = () => {
           isOpen={isPaymentModalOpen}
           closeModal={() => setIsPaymentModalOpen(false)}
           plan={user.nextPayment?.plan || user.plan}
-          existingPayment={user.nextPayment} // Pass the existing payment details if available
+          existingPayment={user.nextPayment} // تمرير تفاصيل الدفع الحالية إذا كانت متاحة
         />
       )}
 
@@ -338,7 +351,7 @@ const ClientDashboard = () => {
           isOpen={isUpdatePaymentModalOpen}
           closeModal={() => setIsUpdatePaymentModalOpen(false)}
           plan={user.nextPayment?.plan}
-          existingPayment={user.nextPayment} // Pass the existing payment details if available
+          existingPayment={user.nextPayment} // تمرير تفاصيل الدفع الحالية إذا كانت متاحة
         />
       )}
 

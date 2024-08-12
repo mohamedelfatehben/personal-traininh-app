@@ -9,6 +9,7 @@ function Modal({ isOpen, closeModal, title, children }) {
       as="div"
       className="relative z-50"
       onClose={closeModal}
+      style={{ direction: "rtl" }}
     >
       <div
         className="fixed inset-0 bg-black bg-opacity-25 h-auto"

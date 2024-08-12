@@ -5,7 +5,7 @@ const ConfirmationModal = ({ isOpen, title, onConfirm, onCancel }) => {
   return (
     <Modal title="Confirmation" isOpen={isOpen} closeModal={onCancel}>
       <div className="p-4">
-        <p>Do you want to delete {title}?</p>
+        <p>{title}?</p>
         <div className="mt-4 flex justify-end space-x-4">
           <button
             className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-800"

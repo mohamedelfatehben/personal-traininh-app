@@ -23,7 +23,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
           className="py-1 px-3 rounded bg-gray-300"
           onClick={() => onPageChange(currentPage - 1)}
         >
-          Previous
+          السابق
         </button>
       )}
       {pages}
@@ -32,7 +32,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
           className="py-1 px-3 rounded bg-gray-300"
           onClick={() => onPageChange(currentPage + 1)}
         >
-          Next
+          التالي
         </button>
       )}
     </div>

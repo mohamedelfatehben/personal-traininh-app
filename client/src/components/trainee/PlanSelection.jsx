@@ -16,7 +16,7 @@ const PlanSelection = () => {
         const response = await getPlansApi(user.token);
         setPlans(response.data);
       } catch (error) {
-        console.error("Failed to fetch plans", error);
+        console.error("فشل في جلب الخطط", error);
       }
     };
     if (user.token) {
@@ -32,7 +32,7 @@ const PlanSelection = () => {
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 mb-8">
       <h3 className="text-2xl font-semibold mb-4 text-indigo-700">
-        Available Plans
+        الخطط المتاحة
       </h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {plans.map((plan) => (
@@ -42,27 +42,27 @@ const PlanSelection = () => {
           >
             <h4 className="text-xl font-bold text-gray-800">{plan.name}</h4>
             <p className="flex items-center text-indigo-600 mt-2">
-              <FaMoneyBillWave className="mr-1" /> {plan.price} DA
+              <FaMoneyBillWave className="mr-1" /> {plan.price} دج
             </p>
             <p className="mt-4 text-gray-600 flex items-center">
               <FaInfoCircle className="mr-2 text-indigo-600" />{" "}
               {plan.description}
             </p>
             <p className="mt-4 text-gray-600 flex items-center">
-              <FaInfoCircle className="mr-2 text-indigo-600" /> Payment Type:{" "}
+              <FaInfoCircle className="mr-2 text-indigo-600" /> نوع الدفع:{" "}
               {plan.paymentType}
             </p>
             {plan.paymentType === "by day" && (
               <p className="mt-4 text-gray-600 flex items-center">
-                <FaInfoCircle className="mr-2 text-indigo-600" /> Number of
-                Days: {plan.days}
+                <FaInfoCircle className="mr-2 text-indigo-600" /> عدد الأيام:{" "}
+                {plan.days}
               </p>
             )}
             <button
               className="mt-4 flex items-center justify-end text-indigo-600 hover:text-indigo-800"
               onClick={() => handlePlanSelection(plan)}
             >
-              Select Plan <FaArrowRight className="ml-2" />
+              اختر الخطة <FaArrowRight className="ml-2" />
             </button>
           </div>
         ))}

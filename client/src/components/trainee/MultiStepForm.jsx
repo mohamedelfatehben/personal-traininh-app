@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
+import Modal from "../common/Modal";
 import { Button } from "@headlessui/react";
 import { useState } from "react";
 import { FaMale, FaFemale, FaArrowLeft, FaPlus, FaTimes } from "react-icons/fa"; // Import icons from react-icons
 import { useDispatch, useSelector } from "react-redux"; // Import useDispatch from react-redux
 import { updateUserApi } from "../../api/auth"; // Import the update user API function
 import { setUserInfo } from "../../redux/user";
-import Modal from "../common/Modal";
 
 export default function MultiStepModal({ isOpen, closeModal }) {
   const user = useSelector((state) => state.authReducer);
@@ -53,19 +53,18 @@ export default function MultiStepModal({ isOpen, closeModal }) {
 
   const validateStep = () => {
     let stepErrors = {};
-    if (step === 1 && !formData.gender)
-      stepErrors.gender = "Gender is required";
+    if (step === 1 && !formData.gender) stepErrors.gender = "الجنس مطلوب";
     if (step === 2) {
-      if (!formData.age) stepErrors.age = "Age is required";
-      if (!formData.height) stepErrors.height = "Height is required";
-      if (!formData.weight) stepErrors.weight = "Weight is required";
+      if (!formData.age) stepErrors.age = "العمر مطلوب";
+      if (!formData.height) stepErrors.height = "الطول مطلوب";
+      if (!formData.weight) stepErrors.weight = "الوزن مطلوب";
     }
     if (step === 3) {
       if (!formData.trainingFrequency)
-        stepErrors.trainingFrequency = "Training frequency is required";
-      if (!formData.budget) stepErrors.budget = "Budget is required";
+        stepErrors.trainingFrequency = "تردد التدريب مطلوب";
+      if (!formData.budget) stepErrors.budget = "الميزانية مطلوبة";
       if (!formData.fitnessGoals)
-        stepErrors.fitnessGoals = "Fitness goals are required";
+        stepErrors.fitnessGoals = "أهداف اللياقة البدنية مطلوبة";
     }
     setErrors(stepErrors);
     return Object.keys(stepErrors).length === 0;
@@ -85,11 +84,7 @@ export default function MultiStepModal({ isOpen, closeModal }) {
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      closeModal={closeModal}
-      title={"Complete your information"}
-    >
+    <Modal isOpen={isOpen} closeModal={closeModal} title={"أكمل معلوماتك"}>
       <div className="mt-4">
         {step > 1 && (
           <button
@@ -103,7 +98,7 @@ export default function MultiStepModal({ isOpen, closeModal }) {
         {step === 1 && (
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Gender
+              الجنس
             </label>
             <div className="mt-1 flex space-x-4">
               <button
@@ -116,7 +111,7 @@ export default function MultiStepModal({ isOpen, closeModal }) {
                 onClick={() => setFormData({ ...formData, gender: "male" })}
               >
                 <FaMale className="mr-2" size={24} />
-                Male
+                ذكر
               </button>
               <button
                 type="button"
@@ -128,7 +123,7 @@ export default function MultiStepModal({ isOpen, closeModal }) {
                 onClick={() => setFormData({ ...formData, gender: "female" })}
               >
                 <FaFemale className="mr-2" size={24} />
-                Female
+                أنثى
               </button>
             </div>
             {errors.gender && (
@@ -139,7 +134,7 @@ export default function MultiStepModal({ isOpen, closeModal }) {
                 className="rounded-md bg-red-600 py-2 px-4 text-sm font-medium text-white hover:bg-red-700"
                 onClick={closeModal}
               >
-                Cancel
+                إلغاء
               </Button>
               <Button
                 className={`rounded-md bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 ${
@@ -148,7 +143,7 @@ export default function MultiStepModal({ isOpen, closeModal }) {
                 onClick={handleNext}
                 disabled={!formData.gender}
               >
-                Next
+                التالي
               </Button>
             </div>
           </div>
@@ -156,7 +151,7 @@ export default function MultiStepModal({ isOpen, closeModal }) {
         {step === 2 && (
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Age (Must be over 18)
+              العمر (يجب أن يكون أكبر من 18)
             </label>
             <input
               type="number"
@@ -171,7 +166,7 @@ export default function MultiStepModal({ isOpen, closeModal }) {
               <p className="mt-2 text-sm text-red-600">{errors.age}</p>
             )}
             <label className="block text-sm font-medium text-gray-700 mt-4">
-              Height (cm)
+              الطول (سم)
             </label>
             <input
               type="number"
@@ -186,7 +181,7 @@ export default function MultiStepModal({ isOpen, closeModal }) {
               <p className="mt-2 text-sm text-red-600">{errors.height}</p>
             )}
             <label className="block text-sm font-medium text-gray-700 mt-4">
-              Weight (kg)
+              الوزن (كجم)
             </label>
             <input
               type="number"
@@ -205,7 +200,7 @@ export default function MultiStepModal({ isOpen, closeModal }) {
                 className="rounded-md bg-red-600 py-2 px-4 text-sm font-medium text-white hover:bg-red-700"
                 onClick={closeModal}
               >
-                Cancel
+                إلغاء
               </Button>
               <Button
                 className={`rounded-md bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 ${
@@ -216,7 +211,7 @@ export default function MultiStepModal({ isOpen, closeModal }) {
                 onClick={handleNext}
                 disabled={!formData.age || !formData.height || !formData.weight}
               >
-                Next
+                التالي
               </Button>
             </div>
           </div>
@@ -224,7 +219,7 @@ export default function MultiStepModal({ isOpen, closeModal }) {
         {step === 3 && (
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Training Frequency
+              تردد التدريب
             </label>
             <div className="mt-1 flex space-x-4">
               <button
@@ -241,7 +236,7 @@ export default function MultiStepModal({ isOpen, closeModal }) {
                   })
                 }
               >
-                2 days (Low)
+                2 أيام (منخفض)
               </button>
               <button
                 type="button"
@@ -257,7 +252,7 @@ export default function MultiStepModal({ isOpen, closeModal }) {
                   })
                 }
               >
-                3-4 days (Medium)
+                3-4 أيام (متوسط)
               </button>
               <button
                 type="button"
@@ -273,7 +268,7 @@ export default function MultiStepModal({ isOpen, closeModal }) {
                   })
                 }
               >
-                5 days (High)
+                5 أيام (عالي)
               </button>
             </div>
             {errors.trainingFrequency && (
@@ -282,7 +277,7 @@ export default function MultiStepModal({ isOpen, closeModal }) {
               </p>
             )}
             <label className="block text-sm font-medium text-gray-700 mt-4">
-              Food Allergies
+              الحساسية الغذائية
             </label>
             <div className="flex space-x-2 items-center">
               <input
@@ -325,7 +320,7 @@ export default function MultiStepModal({ isOpen, closeModal }) {
               ))}
             </div>
             <label className="block text-sm font-medium text-gray-700 mt-4">
-              Budget (DA)
+              الميزانية (DA)
             </label>
             <input
               type="number"
@@ -340,7 +335,7 @@ export default function MultiStepModal({ isOpen, closeModal }) {
               <p className="mt-2 text-sm text-red-600">{errors.budget}</p>
             )}
             <label className="block text-sm font-medium text-gray-700 mt-4">
-              Fitness Goals
+              أهداف اللياقة البدنية
             </label>
             <select
               name="fitnessGoals"
@@ -350,11 +345,11 @@ export default function MultiStepModal({ isOpen, closeModal }) {
                 errors.fitnessGoals ? "border-red-500" : "border-gray-300"
               }`}
             >
-              <option value="">Select fitness goals</option>
-              <option value="weight_loss">Weight Loss</option>
-              <option value="muscle_gain">Muscle Gain</option>
-              <option value="endurance">Endurance</option>
-              <option value="flexibility">Flexibility</option>
+              <option value="">اختر أهداف اللياقة البدنية</option>
+              <option value="weight_loss">فقدان الوزن</option>
+              <option value="muscle_gain">زيادة العضلات</option>
+              <option value="endurance">القدرة على التحمل</option>
+              <option value="flexibility">المرونة</option>
             </select>
             {errors.fitnessGoals && (
               <p className="mt-2 text-sm text-red-600">{errors.fitnessGoals}</p>
@@ -364,7 +359,7 @@ export default function MultiStepModal({ isOpen, closeModal }) {
                 className="rounded-md bg-red-600 py-2 px-4 text-sm font-medium text-white hover:bg-red-700"
                 onClick={closeModal}
               >
-                Cancel
+                إلغاء
               </Button>
               <Button
                 className={`rounded-md bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 ${
@@ -381,7 +376,7 @@ export default function MultiStepModal({ isOpen, closeModal }) {
                   !formData.fitnessGoals
                 }
               >
-                Submit
+                إرسال
               </Button>
             </div>
           </div>

@@ -108,13 +108,13 @@ const ExercisesSection = () => {
       <div className="flex items-center mb-4">
         <FaDumbbell className="text-green-600 text-2xl mr-2" />
         <h3 className="text-xl md:text-2xl font-semibold text-gray-700">
-          Manage Exercises
+          إدارة التمارين
         </h3>
         <button
-          className="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-800 flex items-center ml-auto"
+          className="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-800 flex items-center mx-auto"
           onClick={() => openExerciseModal()}
         >
-          <FaPlus className="mr-2" /> Add Exercise
+          <FaPlus className="mr-2" /> إضافة تمرين
         </button>
       </div>
       {isLoading ? (
@@ -126,12 +126,12 @@ const ExercisesSection = () => {
           <table className="min-w-full bg-white">
             <thead>
               <tr>
-                <th className="py-2 px-4 border-b text-left">Name</th>
-                <th className="py-2 px-4 border-b text-left">Muscle Group</th>
-                <th className="py-2 px-4 border-b text-left">Description</th>
-                <th className="py-2 px-4 border-b text-left">Video</th>
-                <th className="py-2 px-4 border-b text-left">Image</th>
-                <th className="py-2 px-4 border-b text-left">Actions</th>
+                <th className="py-2 px-4 border-b text-left">الاسم</th>
+                <th className="py-2 px-4 border-b text-left">مجموعة العضلات</th>
+                <th className="py-2 px-4 border-b text-left">الوصف</th>
+                <th className="py-2 px-4 border-b text-left">الفيديو</th>
+                <th className="py-2 px-4 border-b text-left">الصورة</th>
+                <th className="py-2 px-4 border-b text-left">الإجراءات</th>
               </tr>
             </thead>
             <tbody>
@@ -191,7 +191,7 @@ const ExercisesSection = () => {
       />
       <ConfirmationModal
         isOpen={isConfirmationModalOpen}
-        title="Exercise"
+        title="تمرين"
         onConfirm={handleDelete}
         onCancel={closeConfirmationModal}
       />

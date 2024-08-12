@@ -49,12 +49,12 @@ const PlanModal = ({ isOpen, closeModal, savePlan, plan }) => {
   };
 
   return (
-    <Modal title="Plan" isOpen={isOpen} closeModal={closeModal}>
+    <Modal title="الخطة" isOpen={isOpen} closeModal={closeModal}>
       <form onSubmit={handleSubmit} className="gap-y-4">
         <div className="grid grid-cols-1 gap-4">
           <div>
             <label className="block text-sm sm:text-base font-semibold text-indigo-700">
-              Name
+              الاسم
             </label>
             <input
               type="text"
@@ -66,7 +66,7 @@ const PlanModal = ({ isOpen, closeModal, savePlan, plan }) => {
           </div>
           <div>
             <label className="block text-sm sm:text-base font-semibold text-indigo-700">
-              Type
+              النوع
             </label>
             <select
               value={type}
@@ -74,15 +74,13 @@ const PlanModal = ({ isOpen, closeModal, savePlan, plan }) => {
               className="mt-1 p-2 block w-full shadow-sm sm:text-sm border border-indigo-500 rounded-md"
               required
             >
-              <option value="exercise">Exercise</option>
-              <option value="exercise and nutrition">
-                Exercise and Nutrition
-              </option>
+              <option value="exercise">تمرين</option>
+              <option value="exercise and nutrition">تمرين وتغذية</option>
             </select>
           </div>
           <div>
             <label className="block text-sm sm:text-base font-semibold text-indigo-700">
-              Description
+              الوصف
             </label>
             <textarea
               value={description}
@@ -93,7 +91,7 @@ const PlanModal = ({ isOpen, closeModal, savePlan, plan }) => {
           </div>
           <div>
             <label className="block text-sm sm:text-base font-semibold text-indigo-700">
-              Price
+              السعر
             </label>
             <input
               type="number"
@@ -105,7 +103,7 @@ const PlanModal = ({ isOpen, closeModal, savePlan, plan }) => {
           </div>
           <div>
             <label className="block text-sm sm:text-base font-semibold text-indigo-700">
-              Payment Type
+              نوع الدفع
             </label>
             <select
               value={paymentType}
@@ -113,14 +111,14 @@ const PlanModal = ({ isOpen, closeModal, savePlan, plan }) => {
               className="mt-1 p-2 block w-full shadow-sm sm:text-sm border border-indigo-500 rounded-md"
               required
             >
-              <option value="monthly">Monthly</option>
-              <option value="by day">By Day</option>
+              <option value="monthly">شهري</option>
+              <option value="by day">حسب اليوم</option>
             </select>
           </div>
           {paymentType === "by day" && (
             <div>
               <label className="block text-sm sm:text-base font-semibold text-indigo-700">
-                Number of Days
+                عدد الأيام
               </label>
               <input
                 type="number"
@@ -138,14 +136,14 @@ const PlanModal = ({ isOpen, closeModal, savePlan, plan }) => {
             className="bg-gray-600 text-white py-2 px-4 rounded hover:bg-gray-800"
             onClick={closeModal}
           >
-            Cancel
+            إلغاء
           </button>
           <button
             type="submit"
             className="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-800"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Saving..." : "Save"}
+            {isSubmitting ? "جاري الحفظ..." : "حفظ"}
           </button>
         </div>
       </form>

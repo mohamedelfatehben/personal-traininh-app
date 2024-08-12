@@ -1,10 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
 * {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   padding: 0;
   margin: 0;
-  font-family: sans-serif;
+  font-family: "Cairo", sans-serif;
+  font-optical-sizing: auto;
 }
 
 .rbc-btn-group:nth-of-type(3) {

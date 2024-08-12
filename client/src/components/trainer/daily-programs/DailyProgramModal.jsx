@@ -34,7 +34,7 @@ const DailyProgramModal = ({
           setAllExercises(data);
         }
       } catch (error) {
-        setError("Failed to fetch exercises");
+        setError("فشل في جلب التمارين");
       }
     };
 
@@ -66,7 +66,7 @@ const DailyProgramModal = ({
       if (mealInput.meal && mealInput.quantity) {
         setMeals([...meals, mealInput]);
       } else {
-        setError("Meal name and quantity are required");
+        setError("اسم الوجبة والكمية مطلوبان");
       }
     }
     setMealInput({ meal: "", quantity: "" });
@@ -80,15 +80,15 @@ const DailyProgramModal = ({
       setMeals([...meals, mealInput]);
     }
     if (!name) {
-      setError("Program name is required");
+      setError("اسم البرنامج مطلوب");
       return;
     }
     if (exercises.length === 0) {
-      setError("At least one exercise is required");
+      setError("مطلوب تمرين واحد على الأقل");
       return;
     }
     if (calories <= 0) {
-      setError("Calories must be a positive number");
+      setError("يجب أن تكون السعرات الحرارية رقمًا موجبًا");
       return;
     }
 
@@ -104,7 +104,7 @@ const DailyProgramModal = ({
       });
       close();
     } catch (error) {
-      setError("Failed to save daily program");
+      setError("فشل في حفظ البرنامج اليومي");
     } finally {
       setIsSubmitting(false);
     }
@@ -152,31 +152,31 @@ const DailyProgramModal = ({
   };
 
   return (
-    <Modal title="Daily Program" isOpen={isOpen} closeModal={close}>
+    <Modal title="البرنامج اليومي" isOpen={isOpen} closeModal={close}>
       <form onSubmit={handleSubmit} className="gap-y-4">
         {error && <div className="text-red-500">{error}</div>}
         <div className="grid grid-cols-1 gap-4">
           <div>
             <label className="block text-sm sm:text-base font-semibold text-indigo-700">
-              Program Name
+              اسم البرنامج
             </label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="mt-1 p-2 block w-full shadow-sm sm:text-sm border border-indigo-500 rounded-md"
-              placeholder="Enter program name"
+              placeholder="أدخل اسم البرنامج"
             />
           </div>
           <div>
             <label className="block text-sm sm:text-base font-semibold text-indigo-700">
-              Exercises
+              التمارين
             </label>
             <select
               onChange={handleExerciseChange}
               className="mt-1 p-2 block w-full shadow-sm sm:text-sm border border-indigo-500 rounded-md"
             >
-              <option value="">Select exercise</option>
+              <option value="">اختر تمرين</option>
               {allExercises
                 .filter((exercise) =>
                   exercises.every((e) => e._id !== exercise._id)
@@ -208,7 +208,7 @@ const DailyProgramModal = ({
         </div>
         <div className="mt-4">
           <label className="block text-sm sm:text-base font-semibold text-indigo-700">
-            Meals
+            الوجبات
           </label>
           <div className="flex items-center gap-x-2">
             <input
@@ -216,21 +216,21 @@ const DailyProgramModal = ({
               value={mealInput.meal}
               onChange={(e) => handleMealChange("meal", e.target.value)}
               className="p-2 flex-grow shadow-sm sm:text-sm border border-indigo-500 rounded-md"
-              placeholder="Meal name"
+              placeholder="اسم الوجبة"
             />
             <input
               type="text"
               value={mealInput.quantity}
               onChange={(e) => handleMealChange("quantity", e.target.value)}
               className="p-2 flex-grow shadow-sm sm:text-sm border border-indigo-500 rounded-md"
-              placeholder="Quantity"
+              placeholder="الكمية"
             />
             <button
               type="button"
               onClick={addMeal}
               className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700"
             >
-              {editingMealIndex !== null ? "Update Meal" : "Add Meal"}
+              {editingMealIndex !== null ? "تحديث الوجبة" : "إضافة وجبة"}
             </button>
           </div>
           <div className="mt-2 flex gap-x-1 gap-y-2 flex-wrap">
@@ -264,14 +264,14 @@ const DailyProgramModal = ({
         </div>
         <div className="mt-4">
           <label className="block text-sm sm:text-base font-semibold text-indigo-700">
-            Calories
+            السعرات الحرارية
           </label>
           <input
             type="number"
             value={calories}
             onChange={(e) => setCalories(e.target.value)}
             className="mt-1 p-2 block w-full shadow-sm sm:text-sm border border-indigo-500 rounded-md"
-            placeholder="Enter calories"
+            placeholder="أدخل السعرات الحرارية"
           />
         </div>
         <div className="mt-6 flex justify-end gap-x-4">
@@ -280,14 +280,14 @@ const DailyProgramModal = ({
             className="bg-gray-600 text-white py-2 px-4 rounded hover:bg-gray-800"
             onClick={close}
           >
-            Cancel
+            إلغاء
           </button>
           <button
             type="submit"
             className="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-800"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Saving..." : "Save"}
+            {isSubmitting ? "جاري الحفظ..." : "حفظ"}
           </button>
         </div>
       </form>

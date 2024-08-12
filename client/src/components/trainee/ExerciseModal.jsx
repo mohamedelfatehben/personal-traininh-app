@@ -16,7 +16,7 @@ const ExerciseModal = ({ isOpen, closeModal, exercise }) => {
 
   return (
     <Modal
-      title={"Exercise: " + exercise.name}
+      title={"التمرين: " + exercise.name}
       isOpen={isOpen}
       closeModal={closeModal}
     >
@@ -30,23 +30,23 @@ const ExerciseModal = ({ isOpen, closeModal, exercise }) => {
             />
           ) : (
             <div className="w-full max-w-md h-64 bg-gray-300 flex items-center justify-center rounded-lg shadow-lg">
-              <span className="text-gray-500">No Image Available</span>
+              <span className="text-gray-500">لا توجد صورة متاحة</span>
             </div>
           )}
         </div>
         <div className="bg-white p-6 rounded-lg shadow-md">
           <p className="text-gray-700 mb-4">
-            <strong className="text-indigo-700">Muscle Group:</strong>{" "}
+            <strong className="text-indigo-700">مجموعة العضلات:</strong>{" "}
             {exercise.muscleGroup}
           </p>
           <p className="text-gray-700 mb-4">
-            <strong className="text-indigo-700">Description:</strong>{" "}
+            <strong className="text-indigo-700">الوصف:</strong>{" "}
             {exercise.description}
           </p>
           {videoId ? (
             <div className="mb-4 max-w-full">
               <h3 className="text-lg font-semibold mb-2 text-indigo-700">
-                Video
+                فيديو
               </h3>
               <iframe
                 width="100%"
@@ -55,18 +55,18 @@ const ExerciseModal = ({ isOpen, closeModal, exercise }) => {
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
-                title="Exercise Video"
+                title="فيديو التمرين"
                 className="rounded-lg shadow-lg"
                 onError={(e) => {
                   e.target.src = ""; // Clear the src to hide the iframe
                   e.target.parentElement.innerHTML =
-                    "<p class='text-red-500'>Video not available</p>";
+                    "<p class='text-red-500'>الفيديو غير متاح</p>";
                 }}
               ></iframe>
             </div>
           ) : (
             <div className="mb-4 text-red-500">
-              <p>Video not available</p>
+              <p>الفيديو غير متاح</p>
             </div>
           )}
         </div>

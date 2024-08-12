@@ -21,7 +21,7 @@ const ProgramModal = ({ isOpen, closeModal, user, onSave }) => {
         const { data } = await getAllProgramsApi(authUser.token);
         setPrograms(data);
       } catch (error) {
-        setError("Failed to fetch programs");
+        setError("فشل في جلب البرامج");
       }
     };
     fetchPrograms();
@@ -50,7 +50,7 @@ const ProgramModal = ({ isOpen, closeModal, user, onSave }) => {
       onSave(selectedProgram); // Call the onSave callback
       close();
     } catch (error) {
-      setError("Failed to assign program");
+      setError("فشل في تعيين البرنامج");
     } finally {
       setLoading(false);
     }
@@ -68,7 +68,7 @@ const ProgramModal = ({ isOpen, closeModal, user, onSave }) => {
     closeModal();
   };
   return (
-    <Modal title="Assign Program" isOpen={isOpen} closeModal={close}>
+    <Modal title="تعيين برنامج" isOpen={isOpen} closeModal={close}>
       {error && <div className="text-red-500">{error}</div>}
       <div className="grid grid-cols-1 gap-4 max-w-2xl pt-2">
         <select
@@ -76,7 +76,7 @@ const ProgramModal = ({ isOpen, closeModal, user, onSave }) => {
           onChange={(e) => setSelectedProgramId(e.target.value)}
           className="p-2 shadow-sm sm:text-sm border border-indigo-500 rounded-md"
         >
-          <option value="">Select program</option>
+          <option value="">اختر البرنامج</option>
           {programs.map((program) => (
             <option key={program._id} value={program._id}>
               {program.name}
@@ -91,7 +91,7 @@ const ProgramModal = ({ isOpen, closeModal, user, onSave }) => {
             <p className="mt-2 text-gray-600">{selectedProgram.description}</p>
             <div className="mt-4">
               <h4 className="text-md font-semibold text-indigo-700">
-                Daily Programs:
+                البرامج اليومية:
               </h4>
               <div className="flex flex-col md:flex-row flex-wrap gap-4">
                 {Object.entries(selectedProgram.days).map(
@@ -116,23 +116,25 @@ const ProgramModal = ({ isOpen, closeModal, user, onSave }) => {
                       {expandedDays[day] && (
                         <div className="mt-2">
                           <p className="text-sm text-gray-600">
-                            <span className="font-semibold">Name:</span>{" "}
+                            <span className="font-semibold">الاسم:</span>{" "}
                             {dailyProgram.name}
                           </p>
                           <p className="text-sm text-gray-600">
-                            <span className="font-semibold">Exercises:</span>{" "}
+                            <span className="font-semibold">التمارين:</span>{" "}
                             {dailyProgram.exercises
                               .map((exercise) => exercise.name)
                               .join(", ")}
                           </p>
                           <p className="text-sm text-gray-600">
-                            <span className="font-semibold">Meals:</span>{" "}
+                            <span className="font-semibold">الوجبات:</span>{" "}
                             {dailyProgram.meals
                               .map((meal) => `${meal.meal} (${meal.quantity})`)
                               .join(", ")}
                           </p>
                           <p className="text-sm text-gray-600">
-                            <span className="font-semibold">Calories:</span>{" "}
+                            <span className="font-semibold">
+                              السعرات الحرارية:
+                            </span>{" "}
                             {dailyProgram.calories}
                           </p>
                         </div>
@@ -150,7 +152,7 @@ const ProgramModal = ({ isOpen, closeModal, user, onSave }) => {
             className="bg-gray-600 text-white py-2 px-4 rounded hover:bg-gray-800"
             onClick={close}
           >
-            Cancel
+            إلغاء
           </button>
           <button
             type="button"
@@ -158,7 +160,7 @@ const ProgramModal = ({ isOpen, closeModal, user, onSave }) => {
             onClick={handleAssignProgram}
             disabled={loading}
           >
-            {loading ? "Assigning..." : "Assign Program"}
+            {loading ? "جاري التعيين..." : "تعيين البرنامج"}
           </button>
         </div>
       </div>

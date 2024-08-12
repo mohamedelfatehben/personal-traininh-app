@@ -73,62 +73,62 @@ const ExerciseModal = ({ isOpen, closeModal, saveExercise, exercise }) => {
   };
 
   return (
-    <Modal title="Exercise" isOpen={isOpen} closeModal={closeModal}>
+    <Modal title="تمرين" isOpen={isOpen} closeModal={closeModal}>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm sm:text-base font-semibold text-indigo-700">
-              Name
+              الاسم
             </label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="mt-1 p-2 block w-full shadow-sm sm:text-sm border border-indigo-500 rounded-md"
-              placeholder="Enter exercise name"
+              placeholder="أدخل اسم التمرين"
             />
           </div>
           <div>
             <label className="block text-sm sm:text-base font-semibold text-indigo-700">
-              Muscle Group
+              مجموعة العضلات
             </label>
             <input
               type="text"
               value={muscleGroup}
               onChange={(e) => setMuscleGroup(e.target.value)}
               className="mt-1 p-2 block w-full shadow-sm sm:text-sm border border-indigo-500 rounded-md"
-              placeholder="Enter muscle group"
+              placeholder="أدخل مجموعة العضلات"
             />
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm sm:text-base font-semibold text-indigo-700">
-              Description
+              الوصف
             </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="mt-1 p-2 block w-full shadow-sm sm:text-sm border border-indigo-500 rounded-md"
-              placeholder="Enter description"
+              placeholder="أدخل الوصف"
             />
           </div>
           <div>
             <label className="block text-sm sm:text-base font-semibold text-indigo-700">
-              Video URL
+              رابط الفيديو
             </label>
             <input
               type="text"
               value={videoUrl}
               onChange={(e) => setVideoUrl(e.target.value)}
               className="mt-1 p-2 block w-full shadow-sm sm:text-sm border border-indigo-500 rounded-md"
-              placeholder="Enter video URL"
+              placeholder="أدخل رابط الفيديو"
             />
           </div>
         </div>
         <div>
           <label className="block text-sm sm:text-base font-semibold text-indigo-700">
-            Image
+            الصورة
           </label>
           {previewImage ? (
             <div className="relative w-full max-w-xs mx-auto">
@@ -160,14 +160,14 @@ const ExerciseModal = ({ isOpen, closeModal, saveExercise, exercise }) => {
             className="bg-gray-600 text-white py-2 px-4 rounded hover:bg-gray-800"
             onClick={closeModal}
           >
-            Cancel
+            إلغاء
           </button>
           <button
             type="submit"
             className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-800"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Saving..." : "Save"}
+            {isSubmitting ? "جاري الحفظ..." : "حفظ"}
           </button>
         </div>
       </form>

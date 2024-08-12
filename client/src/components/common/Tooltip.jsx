@@ -26,7 +26,7 @@ const Tooltip = ({ content, children, bottom }) => {
         <div
           className={`absolute z-10 bg-indigo-700 text-white p-2 rounded-md text-sm whitespace-no-wrap top-0 ${
             bottom && "top-full bg-indigo-400"
-          } shadow left-0`}
+          } shadow right-0`}
         >
           {content}
         </div>

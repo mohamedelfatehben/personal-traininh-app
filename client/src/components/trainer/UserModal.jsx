@@ -18,101 +18,102 @@ const UserModal = ({ isOpen, closeModal, user }) => {
   }
 
   return (
-    <Modal title={"User Details"} isOpen={isOpen} closeModal={closeModal}>
+    <Modal title={"تفاصيل المستخدم"} isOpen={isOpen} closeModal={closeModal}>
       <div className="mt-4 max-w-3xl">
         <div className="flex flex-col gap-6">
           <div className="bg-indigo-50 p-6 rounded-lg shadow-md">
             <h3 className="text-lg font-semibold text-indigo-700 flex items-center mb-4">
-              <FaUser className="mr-2" /> Personal Information
+              <FaUser className="mr-2" /> معلومات شخصية
             </h3>
             <div className="flex flex-col sm:flex-row flex-wrap gap-x-2">
               <p className="flex flex-row items-center mb-2">
                 <FaUser className="mr-2 text-indigo-500" />{" "}
-                <strong className="text-nowrap">Name:</strong> {user.name}
+                <strong className="text-nowrap">الاسم:</strong> {user.name}
               </p>
               <p className="flex flex-row items-center mb-2">
                 <FaEnvelope className="mr-2 text-indigo-500" />{" "}
-                <strong className="text-nowrap">Email:</strong> {user.email}
+                <strong className="text-nowrap">البريد الإلكتروني:</strong>{" "}
+                {user.email}
               </p>
               <p className="flex flex-row items-center mb-2">
                 <FaCalendarAlt className="mr-2 text-indigo-500" />{" "}
-                <strong className="text-nowrap">Age:</strong>{" "}
+                <strong className="text-nowrap">العمر:</strong>{" "}
                 {user.age || "N/A"}
               </p>
               <p className="flex flex-row items-center mb-2">
                 <FaRulerVertical className="mr-2 text-indigo-500" />{" "}
-                <strong className="text-nowrap">Height:</strong>{" "}
-                {user.height || "N/A"} cm
+                <strong className="text-nowrap">الطول:</strong>{" "}
+                {user.height || "N/A"} سم
               </p>
               <p className="flex flex-row items-center mb-2">
                 <FaWeight className="mr-2 text-indigo-500" />{" "}
-                <strong className="text-nowrap">Weight:</strong>{" "}
-                {user.weight || "N/A"} kg
+                <strong className="text-nowrap">الوزن:</strong>{" "}
+                {user.weight || "N/A"} كجم
               </p>
               <p className="flex flex-row items-center mb-2">
                 <FaGenderless className="mr-2 text-indigo-500" />{" "}
-                <strong className="text-nowrap">Gender:</strong>{" "}
+                <strong className="text-nowrap">الجنس:</strong>{" "}
                 {user.gender || "N/A"}
               </p>
             </div>
           </div>
           <div className="bg-green-50 p-6 rounded-lg shadow-md">
             <h3 className="text-lg font-semibold text-green-700 flex items-center mb-4">
-              <FaDumbbell className="mr-2" /> Fitness Information
+              <FaDumbbell className="mr-2" /> معلومات اللياقة
             </h3>
             <div className="flex justify-center sm:justify-start flex-wrap gap-x-2">
               <p className="flex flex-col  sm:flex-row items-center mb-2">
                 <FaDumbbell className="mr-2 text-green-500" />{" "}
-                <strong className="text-nowrap">Training Frequency:</strong>{" "}
+                <strong className="text-nowrap">تكرار التمارين:</strong>{" "}
                 {user.trainingFrequency || "N/A"}
               </p>
               <p className="flex flex-col  sm:flex-row items-center mb-2">
                 <FaDumbbell className="mr-2 text-green-500" />{" "}
-                <strong className="text-nowrap">Food Allergies:</strong>{" "}
+                <strong className="text-nowrap">الحساسية الغذائية:</strong>{" "}
                 {user.foodAllergies.join(", ") || "N/A"}
               </p>
               <p className="flex flex-col  sm:flex-row items-center mb-2">
                 <FaMoneyBillWave className="mr-2 text-green-500" />{" "}
-                <strong className="text-nowrap">Budget:</strong>{" "}
+                <strong className="text-nowrap">الميزانية:</strong>{" "}
                 {user.budget ? `${user.budget} DA` : "N/A"}
               </p>
               <p className="flex flex-col  sm:flex-row items-center mb-2">
                 <FaDumbbell className="mr-2 text-green-500" />{" "}
-                <strong className="text-nowrap">Fitness Goals:</strong>{" "}
+                <strong className="text-nowrap">أهداف اللياقة:</strong>{" "}
                 {user.fitnessGoals || "N/A"}
               </p>
             </div>
           </div>
           <div className="bg-yellow-50 p-6 rounded-lg shadow-md">
             <h3 className="text-lg font-semibold text-yellow-700 flex items-center mb-4">
-              <FaCalendarAlt className="mr-2" /> Plan Information
+              <FaCalendarAlt className="mr-2" /> معلومات الخطة
             </h3>
             <div className="flex justify-center sm:justify-start flex-wrap gap-x-2">
               <p className="flex flex-col  sm:flex-row items-center mb-2">
                 <FaCalendarAlt className="mr-2 text-yellow-500" />{" "}
-                <strong className="text-nowrap">Current Plan:</strong>{" "}
-                {user.currentPlan ? user.currentPlan.name : "No Plan"}
+                <strong className="text-nowrap">الخطة الحالية:</strong>{" "}
+                {user.currentPlan ? user.currentPlan.name : "لا توجد خطة"}
               </p>
               <p className="flex flex-col  sm:flex-row items-center mb-2">
                 <FaCalendarAlt className="mr-2 text-yellow-500" />{" "}
-                <strong className="text-nowrap">Subscription End:</strong>{" "}
+                <strong className="text-nowrap">انتهاء الاشتراك:</strong>{" "}
                 {user.subscriptionEnd
                   ? new Date(user.subscriptionEnd).toLocaleDateString()
                   : "N/A"}
               </p>
               <p className="flex flex-col  sm:flex-row items-center mb-2">
                 <FaMoneyBillWave className="mr-2 text-yellow-500" />{" "}
-                <strong className="text-nowrap">Current Payment:</strong>{" "}
+                <strong className="text-nowrap">الدفع الحالي:</strong>{" "}
                 {user.currentPayment
                   ? `${user.currentPayment.amount} DA`
-                  : "No Payment"}
+                  : "لا يوجد دفع"}
               </p>
               <p className="flex flex-col  sm:flex-row items-center mb-2">
                 <FaMoneyBillWave className="mr-2 text-yellow-500" />{" "}
-                <strong className="text-nowrap">Next Payment:</strong>{" "}
+                <strong className="text-nowrap">الدفع القادم:</strong>{" "}
                 {user.nextPayment
                   ? `${user.nextPayment.amount} DA`
-                  : "No Payment"}
+                  : "لا يوجد دفع"}
               </p>
             </div>
           </div>
@@ -122,7 +123,7 @@ const UserModal = ({ isOpen, closeModal, user }) => {
             onClick={closeModal}
             className="bg-gray-600 text-white py-2 px-4 rounded hover:bg-gray-800 flex items-center"
           >
-            <FaTimes className="mr-1" /> Close
+            <FaTimes className="mr-1" /> إغلاق
           </button>
         </div>
       </div>

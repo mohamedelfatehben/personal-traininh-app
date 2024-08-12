@@ -93,13 +93,13 @@ const DailyProgramsSection = () => {
       <div className="flex items-center mb-4">
         <FaCalendarDay className="text-indigo-600 text-2xl mr-2" />
         <h3 className="text-xl md:text-2xl font-semibold text-gray-700">
-          Manage Daily Programs
+          إدارة البرامج اليومية
         </h3>
         <button
-          className="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-800 flex items-center ml-auto"
+          className="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-800 flex items-center mx-auto"
           onClick={() => openDailyProgramModal()}
         >
-          <FaPlus className="mr-2" /> Add Daily Program
+          <FaPlus className="mr-2" /> إضافة برنامج يومي
         </button>
       </div>
       {isLoading ? (
@@ -111,13 +111,15 @@ const DailyProgramsSection = () => {
           <table className="min-w-full bg-white">
             <thead>
               <tr>
-                <th className="py-2 px-4 border-b text-left">Name</th>
-                <th className="py-2 px-4 border-b text-left">Muscle Groups</th>
+                <th className="py-2 px-4 border-b text-left">الاسم</th>
                 <th className="py-2 px-4 border-b text-left">
-                  Number of Meals
+                  مجموعات العضلات
                 </th>
-                <th className="py-2 px-4 border-b text-left">Calories</th>
-                <th className="py-2 px-4 border-b text-left">Actions</th>
+                <th className="py-2 px-4 border-b text-left">عدد الوجبات</th>
+                <th className="py-2 px-4 border-b text-left">
+                  السعرات الحرارية
+                </th>
+                <th className="py-2 px-4 border-b text-left">الإجراءات</th>
               </tr>
             </thead>
             <tbody>
@@ -168,7 +170,7 @@ const DailyProgramsSection = () => {
       />
       <ConfirmationModal
         isOpen={isConfirmationModalOpen}
-        title="Daily Program"
+        title="البرنامج اليومي"
         onConfirm={handleDelete}
         onCancel={closeConfirmationModal}
       />

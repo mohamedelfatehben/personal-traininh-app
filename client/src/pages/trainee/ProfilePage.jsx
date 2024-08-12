@@ -1,6 +1,5 @@
-// src/pages/trainee/ProfilePage.js
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 import {
   FaSave,
   FaUser,
@@ -18,7 +17,6 @@ import "react-toastify/dist/ReactToastify.css";
 import Layout from "../../components/Layout";
 
 const ProfilePage = () => {
-  const dispatch = useDispatch();
   const user = useSelector((state) => state.authReducer);
   const [formData, setFormData] = useState({
     age: user.age || "",
@@ -54,14 +52,14 @@ const ProfilePage = () => {
 
   const validateForm = () => {
     let formErrors = {};
-    if (!formData.age) formErrors.age = "Age is required";
-    if (!formData.height) formErrors.height = "Height is required";
-    if (!formData.weight) formErrors.weight = "Weight is required";
+    if (!formData.age) formErrors.age = "العمر مطلوب";
+    if (!formData.height) formErrors.height = "الطول مطلوب";
+    if (!formData.weight) formErrors.weight = "الوزن مطلوب";
     if (!formData.trainingFrequency)
-      formErrors.trainingFrequency = "Training frequency is required";
-    if (!formData.budget) formErrors.budget = "Budget is required";
+      formErrors.trainingFrequency = "مطلوب تكرار التدريب";
+    if (!formData.budget) formErrors.budget = "الميزانية مطلوبة";
     if (!formData.fitnessGoals)
-      formErrors.fitnessGoals = "Fitness goals are required";
+      formErrors.fitnessGoals = "أهداف اللياقة مطلوبة";
     setErrors(formErrors);
     return Object.keys(formErrors).length === 0;
   };
@@ -72,9 +70,9 @@ const ProfilePage = () => {
       try {
         const token = window.localStorage.getItem("token");
         await updateUserApi(token, formData);
-        toast.success("Profile updated successfully!");
+        toast.success("تم تحديث الملف الشخصي بنجاح!");
       } catch (error) {
-        toast.error("Failed to update profile!");
+        toast.error("فشل في تحديث الملف الشخصي!");
         console.error("Failed to update user data", error);
       }
     }
@@ -85,7 +83,7 @@ const ProfilePage = () => {
       <div className="p-6 bg-gray-100 min-h-screen">
         <ToastContainer />
         <h2 className="text-3xl font-bold mb-6 text-indigo-700">
-          Profile Page
+          صفحة الملف الشخصي
         </h2>
         <form
           onSubmit={handleSubmit}
@@ -96,14 +94,14 @@ const ProfilePage = () => {
               <FaUser className="text-indigo-500 mr-2" />
               <div className="w-full">
                 <label className="block text-lg font-bold text-indigo-700">
-                  Age
+                  العمر
                 </label>
                 <input
                   type="number"
                   name="age"
                   value={formData.age}
                   onChange={handleChange}
-                  placeholder="Age"
+                  placeholder="العمر"
                   className="p-2 border border-gray-300 rounded-md w-full"
                 />
                 {errors.age && (
@@ -115,14 +113,14 @@ const ProfilePage = () => {
               <FaRulerVertical className="text-indigo-500 mr-2" />
               <div className="w-full">
                 <label className="block text-lg font-bold text-indigo-700">
-                  Height (cm)
+                  الطول (سم)
                 </label>
                 <input
                   type="number"
                   name="height"
                   value={formData.height}
                   onChange={handleChange}
-                  placeholder="Height (cm)"
+                  placeholder="الطول (سم)"
                   className="p-2 border border-gray-300 rounded-md w-full"
                 />
                 {errors.height && (
@@ -134,14 +132,14 @@ const ProfilePage = () => {
               <FaWeight className="text-indigo-500 mr-2" />
               <div className="w-full">
                 <label className="block text-lg font-bold text-indigo-700">
-                  Weight (kg)
+                  الوزن (كغ)
                 </label>
                 <input
                   type="number"
                   name="weight"
                   value={formData.weight}
                   onChange={handleChange}
-                  placeholder="Weight (kg)"
+                  placeholder="الوزن (كغ)"
                   className="p-2 border border-gray-300 rounded-md w-full"
                 />
                 {errors.weight && (
@@ -153,7 +151,7 @@ const ProfilePage = () => {
               <FaDumbbell className="text-indigo-500 mr-2" />
               <div className="w-full">
                 <label className="block text-lg font-bold text-indigo-700">
-                  Fitness Goals
+                  أهداف اللياقة
                 </label>
                 <select
                   name="fitnessGoals"
@@ -161,11 +159,11 @@ const ProfilePage = () => {
                   onChange={handleChange}
                   className="p-2 border border-gray-300 rounded-md w-full"
                 >
-                  <option value="">Select fitness goals</option>
-                  <option value="weight_loss">Weight Loss</option>
-                  <option value="muscle_gain">Muscle Gain</option>
-                  <option value="endurance">Endurance</option>
-                  <option value="flexibility">Flexibility</option>
+                  <option value="">اختر أهداف اللياقة</option>
+                  <option value="weight_loss">فقدان الوزن</option>
+                  <option value="muscle_gain">زيادة العضلات</option>
+                  <option value="endurance">التحمل</option>
+                  <option value="flexibility">المرونة</option>
                 </select>
                 {errors.fitnessGoals && (
                   <p className="mt-2 text-sm text-red-600">
@@ -178,7 +176,7 @@ const ProfilePage = () => {
               <FaDumbbell className="text-indigo-500 mr-2" />
               <div className="w-full">
                 <label className="block text-lg font-bold text-indigo-700">
-                  Training Frequency
+                  تكرار التدريب
                 </label>
                 <select
                   name="trainingFrequency"
@@ -186,10 +184,10 @@ const ProfilePage = () => {
                   onChange={handleChange}
                   className="p-2 border border-gray-300 rounded-md w-full"
                 >
-                  <option value="">Select training frequency</option>
-                  <option value="low">2 days (Low)</option>
-                  <option value="medium">3-4 days (Medium)</option>
-                  <option value="high">5 days (High)</option>
+                  <option value="">اختر تكرار التدريب</option>
+                  <option value="low">يومان (منخفض)</option>
+                  <option value="medium">3-4 أيام (متوسط)</option>
+                  <option value="high">5 أيام (عالي)</option>
                 </select>
                 {errors.trainingFrequency && (
                   <p className="mt-2 text-sm text-red-600">
@@ -202,7 +200,7 @@ const ProfilePage = () => {
               <FaUtensils className="text-indigo-500 mr-2" />
               <div className="w-full">
                 <label className="block text-lg font-bold text-indigo-700">
-                  Food Allergies
+                  الحساسيات الغذائية
                 </label>
                 <div className="flex space-x-2 items-center">
                   <input
@@ -243,14 +241,14 @@ const ProfilePage = () => {
               <FaDollarSign className="text-indigo-500 mr-2" />
               <div className="w-full">
                 <label className="block text-lg font-bold text-indigo-700">
-                  Budget (DA)
+                  الميزانية (DA)
                 </label>
                 <input
                   type="number"
                   name="budget"
                   value={formData.budget}
                   onChange={handleChange}
-                  placeholder="Budget (DA)"
+                  placeholder="الميزانية (DA)"
                   className="p-2 border border-gray-300 rounded-md w-full"
                 />
                 {errors.budget && (
@@ -265,7 +263,7 @@ const ProfilePage = () => {
               className="mt-4 flex items-center justify-center py-2 px-4 bg-green-600 text-white rounded-md hover:bg-green-700"
             >
               <FaSave className="mr-2" />
-              Save
+              حفظ
             </button>
           </div>
         </form>

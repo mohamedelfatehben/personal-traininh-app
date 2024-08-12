@@ -139,16 +139,16 @@ const TrainerDashboard = () => {
     <Layout>
       <div className="p-4 md:p-6 bg-gray-100 w-screen">
         <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-indigo-700">
-          Trainer Dashboard
+          لوحة المدرب
         </h2>
         <div className="bg-white shadow-lg rounded-lg p-4 md:p-6 mb-4 md:mb-8">
           <h3 className="text-xl md:text-2xl font-semibold mb-4 text-gray-700">
-            Summary of All Clients
+            ملخص جميع العملاء
           </h3>
           <div className="flex flex-col md:flex-row flex-wrap mb-4 gap-y-2 md:gap-x-4">
             <input
               type="text"
-              placeholder="Search by name (write three letters or more)"
+              placeholder="ابحث بالاسم (اكتب ثلاثة أحرف أو أكثر)"
               className="border p-2 rounded flex-grow"
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
@@ -158,25 +158,25 @@ const TrainerDashboard = () => {
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
             >
-              <option value="">Current Payment Status</option>
-              <option value="active">Active</option>
-              <option value="ended">Ended</option>
+              <option value="">حالة الدفع الحالية</option>
+              <option value="active">نشط</option>
+              <option value="ended">منتهي</option>
             </select>
             <select
               className="border p-2 rounded"
               value={filterNextPaymentStatus}
               onChange={(e) => setFilterNextPaymentStatus(e.target.value)}
             >
-              <option value="">Next Payment Status</option>
-              <option value="pending">Pending</option>
-              <option value="denied">Denied</option>
+              <option value="">حالة الدفع القادمة</option>
+              <option value="pending">معلق</option>
+              <option value="denied">مرفوض</option>
             </select>
             <select
               className="border p-2 rounded"
               value={filterPlan}
               onChange={(e) => setFilterPlan(e.target.value)}
             >
-              <option value="">All Plans</option>
+              <option value="">جميع الخطط</option>
               {plans.map((plan) => (
                 <option key={plan._id} value={plan._id}>
                   {plan.name}
@@ -188,22 +188,24 @@ const TrainerDashboard = () => {
             <table className="min-w-full bg-white">
               <thead>
                 <tr>
-                  <th className="py-2 px-4 border-b text-nowrap">Name</th>
-                  <th className="py-2 px-4 border-b text-nowrap">Email</th>
+                  <th className="py-2 px-4 border-b text-nowrap">الاسم</th>
                   <th className="py-2 px-4 border-b text-nowrap">
-                    Current Plan
+                    البريد الإلكتروني
                   </th>
                   <th className="py-2 px-4 border-b text-nowrap">
-                    Subscription End
+                    الخطة الحالية
                   </th>
                   <th className="py-2 px-4 border-b text-nowrap">
-                    Current Payment Status
+                    نهاية الاشتراك
                   </th>
                   <th className="py-2 px-4 border-b text-nowrap">
-                    Next Payment Status
+                    حالة الدفع الحالية
                   </th>
-                  <th className="py-2 px-4 border-b text-nowrap">Program</th>
-                  <th className="py-2 px-4 border-b text-nowrap">Actions</th>
+                  <th className="py-2 px-4 border-b text-nowrap">
+                    حالة الدفع القادمة
+                  </th>
+                  <th className="py-2 px-4 border-b text-nowrap">البرنامج</th>
+                  <th className="py-2 px-4 border-b text-nowrap">الإجراءات</th>
                 </tr>
               </thead>
               <tbody>
@@ -219,24 +221,24 @@ const TrainerDashboard = () => {
                           bottom={true}
                         />
                       ) : (
-                        "No Plan"
+                        "لا توجد خطة"
                       )}
                     </td>
                     <td className="py-2 px-4 border-b">
                       {trainee.subscriptionEnd
                         ? new Date(trainee.subscriptionEnd).toLocaleDateString()
-                        : "N/A"}
+                        : "غير متاح"}
                     </td>
                     <td className="py-2 px-4 border-b">
                       {!trainee.subscriptionEnd ? (
-                        "No payment"
+                        "لا يوجد دفع"
                       ) : new Date(trainee.subscriptionEnd) > new Date() ? (
                         <span className="text-green-500 flex items-center">
-                          <FaCheckCircle className="mr-2" /> Active
+                          <FaCheckCircle className="mr-2" /> نشط
                         </span>
                       ) : (
                         <span className="text-red-500 flex items-center">
-                          <FaTimesCircle className="mr-2" /> Ended
+                          <FaTimesCircle className="mr-2" /> منتهي
                         </span>
                       )}
                     </td>
@@ -249,7 +251,7 @@ const TrainerDashboard = () => {
                             }
                             className="text-yellow-500 flex items-center"
                           >
-                            <FaClock className="mr-2" /> Pending
+                            <FaClock className="mr-2" /> معلق
                           </button>
                         ) : (
                           <button
@@ -258,11 +260,11 @@ const TrainerDashboard = () => {
                             }
                             className="text-red-500 flex items-center"
                           >
-                            <FaTimesCircle className="mr-2" /> Denied
+                            <FaTimesCircle className="mr-2" /> مرفوض
                           </button>
                         )
                       ) : (
-                        <span className="text-gray-500">No Payment</span>
+                        <span className="text-gray-500">لا يوجد دفع</span>
                       )}
                     </td>
                     <td className="py-2 px-4 border-b">
@@ -278,7 +280,7 @@ const TrainerDashboard = () => {
                           className="bg-indigo-500 text-white py-2 px-4 rounded hover:bg-indigo-700 text-nowrap"
                           onClick={() => openProgramModal(trainee)}
                         >
-                          Assign Program
+                          تعيين برنامج
                         </button>
                       )}
                     </td>
@@ -287,7 +289,7 @@ const TrainerDashboard = () => {
                         className="text-indigo-600 hover:text-indigo-800 flex items-center mr-4"
                         onClick={() => openUserModal(trainee)}
                       >
-                        <FaEye className="mr-2" /> Details
+                        <FaEye className="mr-2" /> التفاصيل
                       </button>
                     </td>
                   </tr>

@@ -66,42 +66,42 @@ const ProgramModal = ({ isOpen, closeModal, saveProgram, program }) => {
     closeModal();
   };
   return (
-    <Modal title="Program" isOpen={isOpen} closeModal={close}>
+    <Modal title="البرنامج" isOpen={isOpen} closeModal={close}>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm sm:text-base font-semibold text-indigo-700">
-              Name
+              الاسم
             </label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="mt-1 p-2 block w-full shadow-sm sm:text-sm border border-indigo-500 rounded-md"
-              placeholder="Program name"
+              placeholder="اسم البرنامج"
             />
           </div>
           <div>
             <label className="block text-sm sm:text-base font-semibold text-indigo-700">
-              Description
+              الوصف
             </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="mt-1 p-2 block w-full shadow-sm sm:text-sm border border-indigo-500 rounded-md"
-              placeholder="Program description"
+              placeholder="وصف البرنامج"
             ></textarea>
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {[
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday",
-            "Sunday",
+            "الاثنين",
+            "الثلاثاء",
+            "الأربعاء",
+            "الخميس",
+            "الجمعة",
+            "السبت",
+            "الأحد",
           ].map((day) => {
             return (
               <div key={day}>
@@ -113,7 +113,7 @@ const ProgramModal = ({ isOpen, closeModal, saveProgram, program }) => {
                   onChange={(e) => handleDayChange(day, e.target.value)}
                   className="mt-1 p-2 block w-full shadow-sm sm:text-sm border border-indigo-500 rounded-md"
                 >
-                  <option value="">Select daily program</option>
+                  <option value="">اختر البرنامج اليومي</option>
                   {dailyPrograms?.map((dp) => (
                     <option key={dp._id} value={dp._id}>
                       {dp.name}
@@ -130,14 +130,14 @@ const ProgramModal = ({ isOpen, closeModal, saveProgram, program }) => {
             className="bg-gray-600 text-white py-2 px-4 rounded hover:bg-gray-800"
             onClick={closeModal}
           >
-            Cancel
+            إلغاء
           </button>
           <button
             type="submit"
             className="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-800"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Saving..." : "Save"}
+            {isSubmitting ? "جارٍ الحفظ..." : "حفظ"}
           </button>
         </div>
       </form>
