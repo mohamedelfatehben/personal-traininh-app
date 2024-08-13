@@ -1,6 +1,7 @@
 const LOGIN_USER = "LOGIN_USER";
 const LOGOUT_USER = "LOGOUT_USER";
 const GET_INFO = "GET_INFO";
+const UPDATE_USER_INFO = "UPDATE_USER_INFO";
 
 const initialState = {
   id: window.localStorage.getItem("id") || "",
@@ -13,6 +14,7 @@ const initialState = {
   fitnessGoals: window.localStorage.getItem("fitnessGoals") || "",
   trainingFrequency: window.localStorage.getItem("trainingFrequency") || "",
   budget: window.localStorage.getItem("budget") || "",
+  phoneNumber: window.localStorage.getItem("phoneNumber") || "",
   foodAllergies: [],
   plan: {
     name: window.localStorage.getItem("planName") || "",
@@ -47,6 +49,7 @@ export const setUserInfo = (payload) => {
     subscriptionEnd,
     nextPayment,
     program,
+    phoneNumber,
   } = payload;
   return {
     type: GET_INFO,
@@ -65,9 +68,15 @@ export const setUserInfo = (payload) => {
       subscriptionEnd,
       nextPayment,
       program,
+      phoneNumber,
     },
   };
 };
+
+export const updateUserInfo = (payload) => ({
+  type: UPDATE_USER_INFO,
+  payload,
+});
 
 export const logoutUser = () => ({
   type: LOGOUT_USER,
@@ -99,6 +108,7 @@ const authReducer = (state = initialState, action) => {
       window.localStorage.removeItem("subscriptionEnd");
       window.localStorage.removeItem("nextPayment");
       window.localStorage.removeItem("program");
+      window.localStorage.removeItem("phoneNumber");
       return {
         ...initialState,
         token: "",
@@ -118,6 +128,7 @@ const authReducer = (state = initialState, action) => {
         },
         nextPayment: null,
         program: null,
+        phoneNumber: "",
       };
     case GET_INFO:
       window.localStorage.setItem("name", action.payload.name);
@@ -127,6 +138,7 @@ const authReducer = (state = initialState, action) => {
       window.localStorage.setItem("weight", action.payload.weight);
       window.localStorage.setItem("budget", action.payload.budget);
       window.localStorage.setItem("fitnessGoals", action.payload.fitnessGoals);
+      window.localStorage.setItem("phoneNumber", action.payload.phoneNumber);
       window.localStorage.setItem(
         "trainingFrequency",
         action.payload.trainingFrequency
@@ -170,6 +182,38 @@ const authReducer = (state = initialState, action) => {
         },
         nextPayment: action.payload.nextPayment,
         program: action.payload.program,
+        phoneNumber: action.payload.phoneNumber,
+      };
+    case UPDATE_USER_INFO:
+      // Update the local storage with the new user info
+      window.localStorage.setItem("name", action.payload.name);
+      window.localStorage.setItem("age", action.payload.age);
+      window.localStorage.setItem("height", action.payload.height);
+      window.localStorage.setItem("weight", action.payload.weight);
+      window.localStorage.setItem("budget", action.payload.budget);
+      window.localStorage.setItem("fitnessGoals", action.payload.fitnessGoals);
+      window.localStorage.setItem("phoneNumber", action.payload.phoneNumber);
+      window.localStorage.setItem(
+        "trainingFrequency",
+        action.payload.trainingFrequency
+      );
+      window.localStorage.setItem(
+        "foodAllergies",
+        JSON.stringify(action.payload.foodAllergies)
+      );
+
+      // Update the Redux state with the new user info
+      return {
+        ...state,
+        name: action.payload.name,
+        age: action.payload.age,
+        height: action.payload.height,
+        weight: action.payload.weight,
+        budget: action.payload.budget,
+        fitnessGoals: action.payload.fitnessGoals,
+        trainingFrequency: action.payload.trainingFrequency,
+        foodAllergies: action.payload.foodAllergies,
+        phoneNumber: action.payload.phoneNumber,
       };
     default:
       return state;

@@ -48,6 +48,7 @@ function App() {
               subscriptionEnd: userData.subscriptionEnd || "",
               nextPayment: userData.nextPayment ? userData.nextPayment : null,
               program: userData.program ? userData.program : null,
+              phoneNumber: userData.phoneNumber ? userData.phoneNumber : "",
             })
           );
           if (!userData.nextPayment) {
@@ -106,7 +107,7 @@ function App() {
                 <Route path="/dashboard" element={<ClientDashboard />} />
               </>
             )}
-            <Route path="*" element={<Navigate to={"/"} />} />
+            <Route path="*" element={<Navigate to={"/dashboard"} />} />
           </>
         ) : (
           <>

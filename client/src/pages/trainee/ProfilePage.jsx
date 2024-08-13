@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   FaSave,
   FaUser,
@@ -10,13 +10,16 @@ import {
   FaDollarSign,
   FaPlus,
   FaTimes,
+  FaPhone,
 } from "react-icons/fa";
 import { updateUserApi } from "../../api/auth"; // Import the update user API function
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Layout from "../../components/Layout";
+import { updateUserInfo } from "../../redux/user";
 
 const ProfilePage = () => {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.authReducer);
   const [formData, setFormData] = useState({
     age: user.age || "",
@@ -26,6 +29,7 @@ const ProfilePage = () => {
     trainingFrequency: user.trainingFrequency || "",
     foodAllergies: user.foodAllergies || [],
     budget: user.budget || "",
+    phoneNumber: user.phoneNumber || "", // Add phone number to formData
   });
   const [allergyInput, setAllergyInput] = useState("");
   const [errors, setErrors] = useState({});
@@ -71,6 +75,8 @@ const ProfilePage = () => {
         const token = window.localStorage.getItem("token");
         await updateUserApi(token, formData);
         toast.success("تم تحديث الملف الشخصي بنجاح!");
+        // Dispatch the updateUserInfo action
+        dispatch(updateUserInfo(formData));
       } catch (error) {
         toast.error("فشل في تحديث الملف الشخصي!");
         console.error("Failed to update user data", error);
@@ -253,6 +259,27 @@ const ProfilePage = () => {
                 />
                 {errors.budget && (
                   <p className="mt-2 text-sm text-red-600">{errors.budget}</p>
+                )}
+              </div>
+            </div>
+            <div className="flex items-center">
+              <FaPhone className="text-indigo-500 mr-2" />
+              <div className="w-full">
+                <label className="block text-lg font-bold text-indigo-700">
+                  رقم الهاتف
+                </label>
+                <input
+                  type="text"
+                  name="phoneNumber"
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
+                  placeholder="رقم الهاتف"
+                  className="p-2 border border-gray-300 rounded-md w-full"
+                />
+                {errors.phoneNumber && (
+                  <p className="mt-2 text-sm text-red-600">
+                    {errors.phoneNumber}
+                  </p>
                 )}
               </div>
             </div>
