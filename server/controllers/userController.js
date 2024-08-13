@@ -51,6 +51,7 @@ exports.getUser = async (req, res) => {
           ? { ...user.nextPayment._doc, plan: nextPaymentPlan }
           : null,
         program: user.program,
+        phoneNumber: user.phoneNumber,
       });
     }
 
@@ -62,6 +63,7 @@ exports.getUser = async (req, res) => {
 };
 
 // Update user profile
+// Update user profile
 exports.updateUser = async (req, res) => {
   const {
     age,
@@ -72,6 +74,7 @@ exports.updateUser = async (req, res) => {
     budget,
     fitnessGoals,
     gender,
+    phoneNumber, // Include phoneNumber in the destructuring
   } = req.body;
 
   try {
@@ -88,6 +91,7 @@ exports.updateUser = async (req, res) => {
         user.budget = budget || user.budget;
         user.fitnessGoals = fitnessGoals || user.fitnessGoals;
         user.gender = gender || user.gender;
+        user.phoneNumber = phoneNumber || user.phoneNumber; // Update phoneNumber
       }
       await user.save();
       return res.json(user);

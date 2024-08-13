@@ -12,6 +12,7 @@ const UserSchema = new mongoose.Schema({
   budget: { type: Number, default: null },
   fitnessGoals: { type: String, default: "" },
   gender: { type: String, enum: ["male", "female", ""], default: "" },
+  phoneNumber: { type: String, default: "" }, // Added phoneNumber field
   role: {
     type: String,
     enum: ["admin", "trainer", "trainee"],

@@ -2,7 +2,7 @@ import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
 import "react-calendar/dist/Calendar.css";
 
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Login from "./pages/Login";
@@ -106,6 +106,7 @@ function App() {
                 <Route path="/dashboard" element={<ClientDashboard />} />
               </>
             )}
+            <Route path="*" element={<Navigate to={"/"} />} />
           </>
         ) : (
           <>

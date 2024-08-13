@@ -5,7 +5,7 @@ const User = require("../models/User");
 // Register a new user
 // Register a new user
 exports.register = async (req, res) => {
-  let { name, email, password, role } = req.body;
+  let { name, email, password, role, phoneNumber } = req.body; // Include phoneNumber in the destructuring
 
   // Default role to "trainee" if not provided
   if (!role) {
@@ -38,6 +38,7 @@ exports.register = async (req, res) => {
       email,
       password,
       role,
+      phoneNumber, // Include phoneNumber in the user creation
       ...traineeFields, // Add trainee-specific fields to the user
     });
 

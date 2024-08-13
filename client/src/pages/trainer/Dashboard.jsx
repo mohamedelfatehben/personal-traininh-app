@@ -192,6 +192,7 @@ const TrainerDashboard = () => {
                   <th className="py-2 px-4 border-b text-nowrap">
                     البريد الإلكتروني
                   </th>
+                  <th className="py-2 px-4 border-b text-nowrap">رقم الهاتف</th>
                   <th className="py-2 px-4 border-b text-nowrap">
                     الخطة الحالية
                   </th>
@@ -213,6 +214,10 @@ const TrainerDashboard = () => {
                   <tr key={trainee._id}>
                     <td className="py-2 px-4 border-b">{trainee.name}</td>
                     <td className="py-2 px-4 border-b">{trainee.email}</td>
+                    <td className="py-2 px-4 border-b">
+                      {trainee.phoneNumber}
+                    </td>{" "}
+                    {/* Display phone number */}
                     <td className="py-2 px-4 border-b text-nowrap">
                       {trainee.currentPlan ? (
                         <Excerpted
