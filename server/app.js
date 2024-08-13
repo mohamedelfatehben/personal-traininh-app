@@ -26,5 +26,6 @@ app.use("/api/daily-programs", dailyProgramRoutes);
 app.use("/api/exercises", exerciseRoutes);
 app.use("/api/programs", programRoutes);
 app.use("/api/payments", paymentRoutes);
+app.get("/", (req, res) => res.json("Hello"));
 
 module.exports = app;
