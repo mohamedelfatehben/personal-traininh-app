@@ -23,12 +23,6 @@ function SignUp() {
     setLoading(true);
     setError(null);
 
-    if (parseInt(formData.age) < 18) {
-      setError("يجب أن يكون عمرك 18 عامًا على الأقل للتسجيل.");
-      setLoading(false);
-      return;
-    }
-
     try {
       await signUpApi(formData); // Use the API function
       navigate("/login");

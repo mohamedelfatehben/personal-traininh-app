@@ -77,7 +77,7 @@ function App() {
 
     fetchUserData();
   }, [user.token, dispatch]);
-
+  console.log(user);
   return (
     <BrowserRouter>
       {openDataModel && (
@@ -113,6 +113,7 @@ function App() {
           <>
             <Route path="/login" element={<Login />} />
             <Route path="/sign-up" element={<SignUp />} />
+            <Route path="*" element={<Navigate to={"/login"} />} />
           </>
         )}
       </Routes>

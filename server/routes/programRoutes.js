@@ -6,11 +6,7 @@ const {
   deleteProgram,
   getAllPrograms,
 } = require("../controllers/programController");
-const {
-  trainerAuth,
-  adminAuth,
-  auth,
-} = require("../middlewares/authMiddleware");
+const { trainerAuth, auth } = require("../middlewares/authMiddleware");
 const router = express.Router();
 
 // @route   POST api/programs
@@ -36,6 +32,6 @@ router.get("/all", auth, getAllPrograms);
 // @route   DELETE api/programs/:id
 // @desc    Delete a program
 // @access  Private (admin only)
-router.delete("/:id", adminAuth, deleteProgram);
+router.delete("/:id", trainerAuth, deleteProgram);
 
 module.exports = router;

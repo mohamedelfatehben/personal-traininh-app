@@ -6,7 +6,6 @@ const Tooltip = ({ content, children, bottom }) => {
   const [showTooltip, setShowTooltip] = useState(false);
 
   const handleMouseEnter = () => {
-    console.log("enter");
     setShowTooltip(true);
   };
 

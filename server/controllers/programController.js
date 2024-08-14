@@ -76,7 +76,7 @@ exports.deleteProgram = async (req, res) => {
   try {
     const program = await Program.findById(req.params.id);
     if (program) {
-      await program.remove();
+      await program.deleteOne();
       return res.json({ msg: "Program removed" });
     }
     res.status(404).json({ msg: "Program not found" });

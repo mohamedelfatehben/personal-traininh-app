@@ -55,6 +55,7 @@ const ProgramModal = ({ isOpen, closeModal, saveProgram, program }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    console.log(days);
     await saveProgram({ name, description, days });
     setIsSubmitting(false);
   };
@@ -95,22 +96,22 @@ const ProgramModal = ({ isOpen, closeModal, saveProgram, program }) => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {[
-            "الاثنين",
-            "الثلاثاء",
-            "الأربعاء",
-            "الخميس",
-            "الجمعة",
-            "السبت",
-            "الأحد",
+            { ar: "الاثنين", en: "Monday" },
+            { ar: "الثلاثاء", en: "Tuesday" },
+            { ar: "الأربعاء", en: "Wednesday" },
+            { ar: "الخميس", en: "Thursday" },
+            { ar: "الجمعة", en: "Friday" },
+            { ar: "السبت", en: "Saturday" },
+            { ar: "الأحد", en: "Sunday" },
           ].map((day) => {
             return (
-              <div key={day}>
+              <div key={day.en}>
                 <label className="block text-sm sm:text-base font-semibold text-indigo-700">
-                  {day}
+                  {day.ar}
                 </label>
                 <select
-                  value={days[day] || ""}
-                  onChange={(e) => handleDayChange(day, e.target.value)}
+                  value={days[day.en] || ""}
+                  onChange={(e) => handleDayChange(day.en, e.target.value)}
                   className="mt-1 p-2 block w-full shadow-sm sm:text-sm border border-indigo-500 rounded-md"
                 >
                   <option value="">اختر البرنامج اليومي</option>

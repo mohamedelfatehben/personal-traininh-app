@@ -77,7 +77,7 @@ exports.deleteDailyProgram = async (req, res) => {
   try {
     const dailyProgram = await DailyProgram.findById(req.params.id);
     if (dailyProgram) {
-      await dailyProgram.remove();
+      await dailyProgram.deleteOne();
       return res.json({ msg: "Daily Program removed" });
     }
     res.status(404).json({ msg: "Daily Program not found" });

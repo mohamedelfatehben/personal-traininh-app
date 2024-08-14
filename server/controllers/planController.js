@@ -56,7 +56,7 @@ exports.deletePlan = async (req, res) => {
   try {
     const plan = await Plan.findById(req.params.id);
     if (plan) {
-      await plan.remove();
+      await plan.deleteOne();
       return res.json({ msg: "Plan removed" });
     }
     res.status(404).json({ msg: "Plan not found" });

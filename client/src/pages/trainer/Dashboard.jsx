@@ -212,9 +212,17 @@ const TrainerDashboard = () => {
               <tbody>
                 {trainees.map((trainee) => (
                   <tr key={trainee._id}>
-                    <td className="py-2 px-4 border-b">{trainee.name}</td>
-                    <td className="py-2 px-4 border-b">{trainee.email}</td>
-                    <td className="py-2 px-4 border-b">
+                    <td className="py-2 px-4 border-b text-nowrap">
+                      <Excerpted
+                        text={trainee.name}
+                        length={12}
+                        bottom={true}
+                      />
+                    </td>
+                    <td className="py-2 px-4 border-b text-nowrap">
+                      {trainee.email}
+                    </td>
+                    <td className="py-2 px-4 border-b text-nowrap">
                       {trainee.phoneNumber}
                     </td>{" "}
                     {/* Display phone number */}
@@ -229,12 +237,12 @@ const TrainerDashboard = () => {
                         "لا توجد خطة"
                       )}
                     </td>
-                    <td className="py-2 px-4 border-b">
+                    <td className="py-2 px-4 border-b text-nowrap">
                       {trainee.subscriptionEnd
                         ? new Date(trainee.subscriptionEnd).toLocaleDateString()
                         : "غير متاح"}
                     </td>
-                    <td className="py-2 px-4 border-b">
+                    <td className="py-2 px-4 border-b text-nowrap">
                       {!trainee.subscriptionEnd ? (
                         "لا يوجد دفع"
                       ) : new Date(trainee.subscriptionEnd) > new Date() ? (
@@ -247,7 +255,7 @@ const TrainerDashboard = () => {
                         </span>
                       )}
                     </td>
-                    <td className="py-2 px-4 border-b">
+                    <td className="py-2 px-4 border-b text-nowrap">
                       {trainee.nextPayment ? (
                         trainee.nextPayment.status === "pending" ? (
                           <button
@@ -272,7 +280,7 @@ const TrainerDashboard = () => {
                         <span className="text-gray-500">لا يوجد دفع</span>
                       )}
                     </td>
-                    <td className="py-2 px-4 border-b">
+                    <td className="py-2 px-4 border-b text-nowrap">
                       {trainee.program ? (
                         <button
                           className="text-indigo-600 hover:text-indigo-800 flex items-center"
@@ -289,7 +297,7 @@ const TrainerDashboard = () => {
                         </button>
                       )}
                     </td>
-                    <td className="py-2 px-4 border-b">
+                    <td className="py-2 px-4 border-b text-nowrap">
                       <button
                         className="text-indigo-600 hover:text-indigo-800 flex items-center mr-4"
                         onClick={() => openUserModal(trainee)}

@@ -16,7 +16,7 @@ const UserModal = ({ isOpen, closeModal, user }) => {
   if (!user) {
     return null;
   }
-
+  const genders = { male: "رجل", female: "امرأة" };
   return (
     <Modal title={"تفاصيل المستخدم"} isOpen={isOpen} closeModal={closeModal}>
       <div className="mt-4 max-w-3xl">
@@ -53,7 +53,7 @@ const UserModal = ({ isOpen, closeModal, user }) => {
               <p className="flex flex-row items-center mb-2">
                 <FaGenderless className="mr-2 text-indigo-500" />{" "}
                 <strong className="text-nowrap">الجنس:</strong>{" "}
-                {user.gender || "N/A"}
+                {genders[`${user.gender}`] || "N/A"}
               </p>
             </div>
           </div>

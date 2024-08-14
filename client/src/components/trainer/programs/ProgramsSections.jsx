@@ -121,11 +121,12 @@ const ProgramsSection = () => {
                     />
                   </td>
                   <td className="py-2 px-4 border-b">
-                    {Object.keys(program.days).map((day) => (
-                      <div key={day}>
-                        {day}: {program.days[day]?.name || "N/A"}
-                      </div>
-                    ))}
+                    {program.days &&
+                      Object.keys(program.days).map((day) => (
+                        <div key={day}>
+                          {day}: {program.days[day]?.name || "N/A"}
+                        </div>
+                      ))}
                   </td>
                   <td className="py-2 px-4 border-b flex space-x-2">
                     <button

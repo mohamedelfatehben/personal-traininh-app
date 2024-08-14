@@ -28,16 +28,17 @@ const ProgramModal = ({ isOpen, closeModal, user, onSave }) => {
   }, [authUser.token]);
 
   useEffect(() => {
-    if (selectedProgramId) {
+    if (user && user.program) {
+      setSelectedProgramId(user.program._id);
       const program = programs.find(
-        (program) => program._id === selectedProgramId
+        (program) => program._id === user.program._id
       );
       setSelectedProgram(program);
       setExpandedDays({});
     } else {
       setSelectedProgram(null);
     }
-  }, [selectedProgramId, programs]);
+  }, [user]);
 
   const handleAssignProgram = async () => {
     setLoading(true);
