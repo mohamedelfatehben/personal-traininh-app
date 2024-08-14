@@ -128,6 +128,7 @@ const TrainerDashboard = () => {
 
   const handleProgramSave = (program) => {
     const updatedUser = { ...selectedUser, program };
+    console.log(program);
     const updatedTrainees = trainees.map((trainee) =>
       trainee._id === updatedUser._id ? updatedUser : trainee
     );

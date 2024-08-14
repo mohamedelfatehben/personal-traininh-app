@@ -68,13 +68,20 @@ const ProgramModal = ({ isOpen, closeModal, user, onSave }) => {
     setSelectedProgramId("");
     closeModal();
   };
+  const handleSelectProgram = (id) => {
+    setSelectedProgramId(id);
+    const program = programs.find((program) => program._id === id);
+    setSelectedProgram(program);
+  };
   return (
     <Modal title="تعيين برنامج" isOpen={isOpen} closeModal={close}>
       {error && <div className="text-red-500">{error}</div>}
       <div className="grid grid-cols-1 gap-4 max-w-2xl pt-2">
         <select
           value={selectedProgramId}
-          onChange={(e) => setSelectedProgramId(e.target.value)}
+          onChange={(e) => {
+            handleSelectProgram(e.target.value);
+          }}
           className="p-2 shadow-sm sm:text-sm border border-indigo-500 rounded-md"
         >
           <option value="">اختر البرنامج</option>
