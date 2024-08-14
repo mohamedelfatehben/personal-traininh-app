@@ -6,7 +6,7 @@ const ExerciseModal = ({ isOpen, closeModal, exercise }) => {
 
   const getVideoId = (url) => {
     const regex =
-      /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+      /(?:youtube\.com\/(?:[^/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
     const match = url.match(regex);
     return match ? match[1] : null;
   };
@@ -24,7 +24,7 @@ const ExerciseModal = ({ isOpen, closeModal, exercise }) => {
         <div className="flex justify-center mb-6">
           {exercise.image ? (
             <img
-              src={exercise.image}
+              src={`data:image/jpeg;base64,${exercise.image}`}
               alt={exercise.name}
               className="w-full max-w-md h-auto object-cover rounded-lg shadow-lg"
             />

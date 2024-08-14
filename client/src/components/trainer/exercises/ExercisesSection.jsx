@@ -152,10 +152,7 @@ const ExercisesSection = () => {
                   <td className="py-2 px-4 border-b">
                     {exercise.image && (
                       <img
-                        src={
-                          exercise.image ||
-                          `data:image/jpeg;base64,${exercise.image}`
-                        }
+                        src={`data:image/jpeg;base64,${exercise.image}`}
                         alt={exercise.name}
                         className="w-16 h-16 object-cover"
                       />

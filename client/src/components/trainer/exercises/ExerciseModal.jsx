@@ -24,7 +24,7 @@ const ExerciseModal = ({ isOpen, closeModal, saveExercise, exercise }) => {
       setMuscleGroup(exercise.muscleGroup);
       setDescription(exercise.description);
       setVideoUrl(exercise.videoUrl);
-      setPreviewImage(exercise.image);
+      setPreviewImage(`data:image/jpeg;base64,${exercise.image}`);
       setImageFile(null);
     } else {
       setName("");
