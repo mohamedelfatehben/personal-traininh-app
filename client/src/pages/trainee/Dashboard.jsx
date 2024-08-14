@@ -183,7 +183,7 @@ const ClientDashboard = () => {
                             </p>
                             {exercise.image ? (
                               <img
-                                src={exercise.image}
+                                src={`data:image/jpeg;base64,${exercise.image}`}
                                 alt={exercise.name}
                                 className="w-full h-32 object-cover mt-2 rounded"
                               />

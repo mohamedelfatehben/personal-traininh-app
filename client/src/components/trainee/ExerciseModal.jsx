@@ -26,7 +26,7 @@ const ExerciseModal = ({ isOpen, closeModal, exercise }) => {
             <img
               src={`data:image/jpeg;base64,${exercise.image}`}
               alt={exercise.name}
-              className="w-full max-w-md h-auto object-cover rounded-lg shadow-lg"
+              className="w-auto max-w-md h-auto max-h-40 object-cover rounded-lg shadow-lg"
             />
           ) : (
             <div className="w-full max-w-md h-64 bg-gray-300 flex items-center justify-center rounded-lg shadow-lg">
