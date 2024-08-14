@@ -1,7 +1,8 @@
 const Exercise = require("../models/Exercise");
 
 exports.createExercise = async (req, res) => {
-  const { name, muscleGroup, description, videoUrl, image } = req.body;
+  const { name, muscleGroup, description, videoUrl } = req.body;
+  const image = req.file;
 
   try {
     const newExercise = new Exercise({
@@ -9,7 +10,7 @@ exports.createExercise = async (req, res) => {
       muscleGroup,
       description,
       videoUrl,
-      image,
+      image: image.buffer.toString("base64") || "",
     });
     await newExercise.save();
     res.json(newExercise);
@@ -74,7 +75,7 @@ exports.updateExercise = async (req, res) => {
     exercise.muscleGroup = muscleGroup || exercise.muscleGroup;
     exercise.description = description || exercise.description;
     exercise.videoUrl = videoUrl || exercise.videoUrl;
-    exercise.image = image || exercise.image;
+    exercise.image = image.buffer.toString("base64") || exercise.image;
 
     await exercise.save();
     res.json(exercise);

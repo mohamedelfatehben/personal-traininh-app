@@ -8,12 +8,17 @@ const {
   getAllExercises,
 } = require("../controllers/exerciseController");
 const { trainerAuth } = require("../middlewares/authMiddleware");
+const multer = require("multer");
 const router = express.Router();
+
+//For converting image to base 64
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 // @route   POST api/exercises
 // @desc    Create a new exercise
 // @access  Private (trainer only)
-router.post("/", trainerAuth, createExercise);
+router.post("/", trainerAuth, upload.single("image"), createExercise);
 
 // @route   GET api/exercises
 // @desc    Get all exercises
@@ -32,7 +37,7 @@ router.get("/:id", trainerAuth, getExerciseById);
 // @route   PUT api/exercises/:id
 // @desc    Update an exercise
 // @access  Private (trainer only)
-router.put("/:id", trainerAuth, updateExercise);
+router.put("/:id", trainerAuth, upload.single("image"), updateExercise);
 
 // @route   DELETE api/exercises/:id
 // @desc    Delete an exercise

@@ -57,18 +57,25 @@ const ExerciseModal = ({ isOpen, closeModal, saveExercise, exercise }) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const exerciseData = { name, muscleGroup, description, videoUrl };
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("muscleGroup", muscleGroup);
+    formData.append("description", description);
+    formData.append("videoUrl", videoUrl);
 
     if (imageFile) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        exerciseData.image = reader.result;
-        saveExercise(exerciseData).finally(() => setIsSubmitting(false));
-      };
-      reader.readAsDataURL(imageFile);
-    } else {
-      exerciseData.image = previewImage;
-      saveExercise(exerciseData).finally(() => setIsSubmitting(false));
+      formData.append("image", imageFile);
+    } else if (previewImage) {
+      formData.append("image", previewImage);
+    }
+
+    try {
+      await saveExercise(formData);
+      closeModal();
+    } catch (error) {
+      console.error("Failed to save exercise", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
