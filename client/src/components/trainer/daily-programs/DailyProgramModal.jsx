@@ -1,9 +1,10 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
-import { FaEdit } from "react-icons/fa";
 import Modal from "../../common/Modal";
 import { getAllExercisesApi } from "../../../api/trainer";
 import { useSelector } from "react-redux";
+import Select from "react-select";
+import { FaEdit } from "react-icons/fa";
 
 const DailyProgramModal = ({
   isOpen,
@@ -31,7 +32,9 @@ const DailyProgramModal = ({
       try {
         if (user.token) {
           const { data } = await getAllExercisesApi(user.token);
-          setAllExercises(data);
+          setAllExercises(
+            data.map((ex) => ({ value: ex._id, label: ex.name }))
+          );
         }
       } catch (error) {
         setError("فشل في جلب التمارين");
@@ -55,6 +58,14 @@ const DailyProgramModal = ({
     }
   }, [dailyProgram]);
 
+  const handleExerciseChange = (selectedOptions) => {
+    const selectedExercises = selectedOptions.map((option) => ({
+      _id: option.value,
+      name: option.label,
+    }));
+    setExercises(selectedExercises);
+  };
+
   const addMeal = () => {
     if (editingMealIndex !== null) {
       const updatedMeals = meals.map((meal, index) =>
@@ -75,7 +86,7 @@ const DailyProgramModal = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    // Ensure the current meal input is added to the meals list before saving
+
     if (mealInput.meal !== "" && mealInput.quantity !== "") {
       setMeals([...meals, mealInput]);
     }
@@ -110,19 +121,6 @@ const DailyProgramModal = ({
     }
   };
 
-  const handleExerciseChange = (e) => {
-    const selectedExerciseId = e.target.value;
-    const selectedExercise = allExercises.find(
-      (exercise) => exercise._id === selectedExerciseId
-    );
-    if (
-      selectedExercise &&
-      !exercises.find((e) => e._id === selectedExerciseId)
-    ) {
-      setExercises([...exercises, selectedExercise]);
-    }
-  };
-
   const handleMealChange = (field, value) => {
     setError("");
     setMealInput({ ...mealInput, [field]: value });
@@ -153,7 +151,7 @@ const DailyProgramModal = ({
 
   return (
     <Modal title="البرنامج اليومي" isOpen={isOpen} closeModal={close}>
-      <form onSubmit={handleSubmit} className="gap-y-4">
+      <form onSubmit={handleSubmit} className="gap-y-4 max-w-2xl">
         {error && <div className="text-red-500">{error}</div>}
         <div className="grid grid-cols-1 gap-4">
           <div>
@@ -172,21 +170,14 @@ const DailyProgramModal = ({
             <label className="block text-sm sm:text-base font-semibold text-indigo-700">
               التمارين
             </label>
-            <select
+            <Select
+              isMulti
+              options={allExercises}
               onChange={handleExerciseChange}
-              className="mt-1 p-2 block w-full shadow-sm sm:text-sm border border-indigo-500 rounded-md"
-            >
-              <option value="">اختر تمرين</option>
-              {allExercises
-                .filter((exercise) =>
-                  exercises.every((e) => e._id !== exercise._id)
-                )
-                ?.map((exercise) => (
-                  <option key={exercise._id} value={exercise._id}>
-                    {exercise.name}
-                  </option>
-                ))}
-            </select>
+              value={exercises.map((ex) => ({ value: ex._id, label: ex.name }))}
+              className="mt-1"
+              placeholder="اختر التمارين"
+            />
             <div className="mt-2 flex gap-x-1 gap-y-2 flex-wrap">
               {exercises.map((exercise, index) => (
                 <div
