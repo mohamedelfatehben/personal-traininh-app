@@ -75,6 +75,7 @@ const PlanModal = ({ isOpen, closeModal, savePlan, plan }) => {
               required
             >
               <option value="exercise">تمرين</option>
+              <option value="nutrition">تغذية</option>
               <option value="exercise and nutrition">تمرين وتغذية</option>
             </select>
           </div>
