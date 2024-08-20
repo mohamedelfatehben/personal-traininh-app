@@ -1,6 +1,8 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const crypto = require("crypto");
+const nodemailer = require("nodemailer");
 
 // Register a new user
 // Register a new user
@@ -129,6 +131,105 @@ exports.addTrainer = async (req, res) => {
     await user.save();
 
     res.json({ msg: "Trainer added successfully", user });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};
+
+// Generate a random token for password reset
+const generateResetToken = () => {
+  return crypto.randomBytes(32).toString("hex");
+};
+
+// Send password reset email
+const sendResetEmail = async (email, token) => {
+  const transporter = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+      user: process.env.EMAIL_USER, // Your email
+      pass: process.env.EMAIL_PASS, // Your email password
+    },
+  });
+
+  const mailOptions = {
+    from: `"Nabil Sport" <${process.env.EMAIL_USER}>`,
+    to: email,
+    subject: "طلب إعادة تعيين كلمة المرور",
+    html: `
+      <div style="font-family: sans-serif; color: #333;text-align: center;">
+        <h2 style="text-align: center; color: #4CAF50;">إعادة تعيين كلمة المرور</h2>
+        <p style="text-align: right;">
+          لقد طلبت إعادة تعيين كلمة المرور الخاصة بك. انقر على الزر أدناه لإعادة تعيين كلمة المرور:
+        </p>
+        <div style="text-align: center; margin: 20px;">
+          <a href="${
+            process.env.FRONTEND_URL
+          }/reset-password/${token}" style="padding: 10px 20px; color: white; background-color: #4CAF50; text-decoration: none; border-radius: 5px;">
+            إعادة تعيين كلمة المرور
+          </a>
+        </div>
+        <p style="text-align: right;">
+          إذا لم تطلب إعادة تعيين كلمة المرور، فيرجى تجاهل هذه الرسالة.
+        </p>
+        <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+        <p style="text-align: center; font-size: 12px; color: #999;">
+          &copy; ${new Date().getFullYear()} Nabil Sport . جميع الحقوق محفوظة.
+        </p>
+      </div>
+    `,
+  };
+
+  await transporter.sendMail(mailOptions);
+};
+
+// Request password reset
+exports.requestPasswordReset = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res
+        .status(400)
+        .json({ msg: "User with this email does not exist" });
+    }
+
+    const resetToken = generateResetToken();
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+    await user.save();
+
+    await sendResetEmail(email, resetToken);
+
+    res.status(200).json({ msg: "Password reset link sent to your email" });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};
+
+// Reset password
+exports.resetPassword = async (req, res) => {
+  const { token, password } = req.body;
+
+  try {
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ msg: "Invalid or expired token" });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password, salt);
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    res.status(200).json({ msg: "Password has been reset" });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");

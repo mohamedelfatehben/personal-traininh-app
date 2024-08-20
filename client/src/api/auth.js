@@ -25,3 +25,11 @@ export const updateUserApi = async (token, formData) => {
     },
   });
 };
+
+export const requestPasswordResetApi = (email) => {
+  return axios.post(`${API_URL}/api/auth/request-password-reset`, { email });
+};
+
+export const resetPasswordApi = (token, password) => {
+  return axios.post(`${API_URL}/api/auth/reset-password`, { token, password });
+};

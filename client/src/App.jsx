@@ -16,6 +16,8 @@ import Programs from "./pages/trainer/Programs";
 import PlansSection from "./components/trainer/plans/PlansSection";
 import Home from "./pages/Home";
 import SignUp from "./pages/SignUp";
+import ForgotPassword from "./pages/trainee/ForgotPassword";
+import ResetPassword from "./pages/trainee/ResetPassword";
 
 function App() {
   const dispatch = useDispatch();
@@ -92,6 +94,7 @@ function App() {
       )}
       <Routes>
         <Route path="/" element={<Home />} />
+
         {user.token ? (
           <>
             {user.role === "trainer" && (
@@ -114,6 +117,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="*" element={<Navigate to={"/login"} />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
           </>
         )}
       </Routes>

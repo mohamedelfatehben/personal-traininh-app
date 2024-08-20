@@ -23,6 +23,8 @@ const UserSchema = new mongoose.Schema({
   nextPayment: { type: mongoose.Schema.Types.ObjectId, ref: "Payment" },
   subscriptionEnd: { type: Date },
   program: { type: mongoose.Schema.Types.ObjectId, ref: "Program" },
+  resetPasswordToken: { type: String },
+  resetPasswordExpires: { type: Date },
 });
 
 module.exports = mongoose.model("User", UserSchema);
