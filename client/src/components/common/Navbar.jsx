@@ -31,7 +31,7 @@ function Navbar() {
   return (
     <Disclosure
       as="nav"
-      className="bg-gray-800 p-4 shadow-md fixed top-0 left-0 w-screen z-50 transition duration-300"
+      className="bg-gray-900 p-4 shadow-lg fixed top-0 left-0 w-full z-50"
     >
       {({ open }) => (
         <>
@@ -42,7 +42,7 @@ function Navbar() {
             >
               <img
                 src="/logo.jfif"
-                alt=""
+                alt="Logo"
                 className="w-12 md:w-16 h-auto rounded-full"
               />
             </Link>
@@ -51,50 +51,40 @@ function Navbar() {
                 <>
                   {role === "trainer" && (
                     <>
-                      <Link
+                      <NavLink
                         to="/dashboard"
-                        className="text-white flex items-center hover:text-gray-300 transition duration-300 gap-x-2 items-center"
-                      >
-                        <FaTachometerAlt />
-                        <span>Dashboard</span>
-                      </Link>
-                      <Link
+                        icon={<FaTachometerAlt />}
+                        label="Dashboard"
+                      />
+                      <NavLink
                         to="/programs"
-                        className="text-white flex items-center hover:text-gray-300 transition duration-300 gap-x-2 items-center"
-                      >
-                        <FaClipboardList />
-                        <span>البرامج</span>
-                      </Link>
-                      <Link
+                        icon={<FaClipboardList />}
+                        label="البرامج"
+                      />
+                      <NavLink
                         to="/plans"
-                        className="text-white flex items-center hover:text-gray-300 transition duration-300 gap-x-2 items-center"
-                      >
-                        <FaFileInvoiceDollar />
-                        <span>الخطط</span>
-                      </Link>
+                        icon={<FaFileInvoiceDollar />}
+                        label="الخطط"
+                      />
                     </>
                   )}
                   {role === "trainee" && (
                     <>
-                      <Link
+                      <NavLink
                         to="/profile"
-                        className="text-white flex items-center hover:text-gray-300 transition duration-300 gap-x-2 items-center"
-                      >
-                        <FaUser />
-                        <span>الملف الشخصي</span>
-                      </Link>
-                      <Link
+                        icon={<FaUser />}
+                        label="الملف الشخصي"
+                      />
+                      <NavLink
                         to="/dashboard"
-                        className="text-white flex items-center hover:text-gray-300 transition duration-300 gap-x-2 items-center"
-                      >
-                        <FaTachometerAlt />
-                        <span>Dashboard</span>
-                      </Link>
+                        icon={<FaTachometerAlt />}
+                        label="Dashboard"
+                      />
                     </>
                   )}
                   <button
                     onClick={handleLogout}
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded flex items-center gap-x-2 transition duration-300"
+                    className="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded flex items-center gap-x-2 transition duration-300"
                   >
                     <FaSignOutAlt />
                     <span>تسجيل خروج</span>
@@ -102,20 +92,16 @@ function Navbar() {
                 </>
               ) : (
                 <>
-                  <Link
+                  <NavLink
                     to="/login"
-                    className="text-white flex items-center hover:text-gray-300 transition duration-300 gap-x-2 items-center"
-                  >
-                    <FaSignInAlt />
-                    <span>تسجيل الدخول</span>
-                  </Link>
-                  <Link
+                    icon={<FaSignInAlt />}
+                    label="تسجيل الدخول"
+                  />
+                  <NavLink
                     to="/sign-up"
-                    className="text-white flex items-center hover:text-gray-300 transition duration-300 gap-x-2 items-center"
-                  >
-                    <FaUserPlus />
-                    <span>التسجيل</span>
-                  </Link>
+                    icon={<FaUserPlus />}
+                    label="التسجيل"
+                  />
                 </>
               )}
             </div>
@@ -138,50 +124,40 @@ function Navbar() {
                   <>
                     {role === "trainer" && (
                       <>
-                        <Link
+                        <MobileNavLink
                           to="/dashboard"
-                          className="text-white flex items-center hover:text-gray-300 transition duration-300 gap-x-2 items-center"
-                        >
-                          <FaTachometerAlt />
-                          لوحة القيادة
-                        </Link>
-                        <Link
+                          icon={<FaTachometerAlt />}
+                          label="لوحة القيادة"
+                        />
+                        <MobileNavLink
                           to="/programs"
-                          className="text-white flex items-center hover:text-gray-300 transition duration-300 gap-x-2 items-center"
-                        >
-                          <FaClipboardList />
-                          البرامج
-                        </Link>
-                        <Link
+                          icon={<FaClipboardList />}
+                          label="البرامج"
+                        />
+                        <MobileNavLink
                           to="/plans"
-                          className="text-white flex items-center hover:text-gray-300 transition duration-300 gap-x-2 items-center"
-                        >
-                          <FaFileInvoiceDollar />
-                          الخطط
-                        </Link>
+                          icon={<FaFileInvoiceDollar />}
+                          label="الخطط"
+                        />
                       </>
                     )}
                     {role === "trainee" && (
                       <>
-                        <Link
+                        <MobileNavLink
                           to="/profile"
-                          className="text-white flex items-center hover:text-gray-300 transition duration-300 gap-x-2 items-center"
-                        >
-                          <FaUser />
-                          الملف الشخصي
-                        </Link>
-                        <Link
+                          icon={<FaUser />}
+                          label="الملف الشخصي"
+                        />
+                        <MobileNavLink
                           to="/dashboard"
-                          className="text-white flex items-center hover:text-gray-300 transition duration-300 gap-x-2 items-center"
-                        >
-                          <FaTachometerAlt />
-                          لوحة القيادة
-                        </Link>
+                          icon={<FaTachometerAlt />}
+                          label="لوحة القيادة"
+                        />
                       </>
                     )}
                     <button
                       onClick={handleLogout}
-                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded flex items-center w-full transition duration-300"
+                      className="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded flex items-center w-full transition duration-300"
                     >
                       <FaSignOutAlt />
                       تسجيل خروج
@@ -189,20 +165,16 @@ function Navbar() {
                   </>
                 ) : (
                   <>
-                    <Link
+                    <MobileNavLink
                       to="/login"
-                      className="text-white flex items-center hover:text-gray-300 transition duration-300 gap-x-2 items-center"
-                    >
-                      <FaSignInAlt />
-                      تسجيل الدخول
-                    </Link>
-                    <Link
+                      icon={<FaSignInAlt />}
+                      label="تسجيل الدخول"
+                    />
+                    <MobileNavLink
                       to="/sign-up"
-                      className="text-white flex items-center hover:text-gray-300 transition duration-300 gap-x-2 items-center"
-                    >
-                      <FaUserPlus />
-                      التسجيل
-                    </Link>
+                      icon={<FaUserPlus />}
+                      label="التسجيل"
+                    />
                   </>
                 )}
               </div>
@@ -213,5 +185,25 @@ function Navbar() {
     </Disclosure>
   );
 }
+
+const NavLink = ({ to, icon, label }) => (
+  <Link
+    to={to}
+    className="text-white flex items-center hover:text-gray-300 transition duration-300 gap-x-2"
+  >
+    {icon}
+    <span>{label}</span>
+  </Link>
+);
+
+const MobileNavLink = ({ to, icon, label }) => (
+  <Link
+    to={to}
+    className="text-white flex items-center hover:text-gray-300 transition duration-300 gap-x-2"
+  >
+    {icon}
+    <span>{label}</span>
+  </Link>
+);
 
 export default Navbar;

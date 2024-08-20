@@ -90,7 +90,7 @@ const ClientDashboard = () => {
       }
     }
   }, [user.plan?.subscriptionEnd]);
-
+  console.log(user);
   return (
     <Layout>
       <div className="p-4 md:p-6 bg-gray-100 min-h-screen">
@@ -147,7 +147,7 @@ const ClientDashboard = () => {
                 </div>
               </div>
               <div className="bg-white shadow-lg rounded-lg p-4 md:p-6 mb-4 md:mb-8">
-                <div className="flex justify-center gap-x-4 mb-4">
+                <div className="flex justify-center flex-wrap gap-4 mb-4">
                   {getDaysOfWeek().map((day) => (
                     <button
                       key={day}
@@ -165,43 +165,58 @@ const ClientDashboard = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="md:col-span-2">
-                    <h3 className="text-xl font-semibold mb-4 text-gray-700">
-                      التمارين
-                    </h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {getExercisesForDay(selectedDay).length > 0 ? (
-                        getExercisesForDay(selectedDay).map((exercise) => (
-                          <div
-                            key={exercise._id}
-                            className="p-4 bg-gray-100 rounded shadow cursor-pointer"
-                            onClick={() => handleExerciseClick(exercise)}
-                          >
-                            <FaDumbbell className="text-indigo-500 mb-2" />
-                            <p className="font-semibold text-gray-700">
-                              {exercise.name}
-                            </p>
-                            {exercise.image ? (
-                              <img
-                                src={`data:image/jpeg;base64,${exercise.image}`}
-                                alt={exercise.name}
-                                className="w-full h-32 object-cover mt-2 rounded"
-                              />
-                            ) : (
-                              <div className="w-full h-32 bg-gray-200 mt-2 rounded"></div>
-                            )}
-                          </div>
-                        ))
-                      ) : (
-                        <p className="text-gray-600">
-                          لا توجد تمارين مجدولة لـ {getArabicDay(selectedDay)}.
-                        </p>
-                      )}
+                  {user.plan?.type?.includes("exercise") && (
+                    <div
+                      className={
+                        user.plan?.type === "exercise"
+                          ? "md:col-span-3"
+                          : "md:col-span-2"
+                      }
+                    >
+                      <h3 className="text-xl font-semibold mb-4 text-gray-700">
+                        التمارين
+                      </h3>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {getExercisesForDay(selectedDay).length > 0 ? (
+                          getExercisesForDay(selectedDay).map((exercise) => (
+                            <div
+                              key={exercise._id}
+                              className="p-4 bg-gray-100 rounded shadow hover:shadow-lg transition-shadow duration-300 ease-in-out cursor-pointer"
+                              onClick={() => handleExerciseClick(exercise)}
+                            >
+                              <FaDumbbell className="text-indigo-500 mb-2 text-2xl" />
+                              <p className="font-semibold text-gray-700">
+                                {exercise.name}
+                              </p>
+                              {exercise.image ? (
+                                <img
+                                  src={`data:image/jpeg;base64,${exercise.image}`}
+                                  alt={exercise.name}
+                                  className="w-full h-32 object-cover mt-2 rounded"
+                                />
+                              ) : (
+                                <div className="w-full h-32 bg-gray-200 mt-2 rounded"></div>
+                              )}
+                            </div>
+                          ))
+                        ) : (
+                          <p className="text-gray-600">
+                            لا توجد تمارين مجدولة لـ {getArabicDay(selectedDay)}
+                            .
+                          </p>
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  )}
 
-                  {user.plan?.type === "exercise and nutrition" && (
-                    <div>
+                  {user.plan?.type?.includes("nutrition") && (
+                    <div
+                      className={
+                        user.plan?.type === "nutrition"
+                          ? "md:col-span-3"
+                          : "md:col-span-1"
+                      }
+                    >
                       <h3 className="text-xl font-semibold mb-4 text-gray-700">
                         الوجبات
                       </h3>
@@ -210,11 +225,11 @@ const ClientDashboard = () => {
                           getMealsForDay(selectedDay).map((meal) => (
                             <div
                               key={meal._id}
-                              className="p-4 bg-gray-100 rounded shadow"
+                              className="p-4 bg-gray-100 rounded shadow hover:shadow-lg transition-shadow duration-300 ease-in-out"
                             >
-                              <FaUtensils className="text-indigo-500 mb-2" />
+                              <FaUtensils className="text-indigo-500 mb-2 text-2xl" />
                               <p className="font-semibold text-gray-700">
-                                {meal.meal} {meal.quantity}
+                                {meal.meal} - {meal.quantity}
                               </p>
                             </div>
                           ))
