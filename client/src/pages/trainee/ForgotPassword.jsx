@@ -1,22 +1,31 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { requestPasswordResetApi } from "../../api/auth";
+import { toast, ToastContainer } from "react-toastify";
+import { FaSpinner } from "react-icons/fa";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage("");
-    setError("");
+    setLoading(true);
 
     try {
       const response = await requestPasswordResetApi(email);
-      setMessage(response.data.msg);
+      toast.success(
+        "تم إرسال رسالة إعادة تعيين كلمة المرور إلى بريدك الإلكتروني"
+      );
+      const timer = setTimeout(() => {
+        navigate("/");
+      }, 3000);
+      return () => clearTimeout(timer);
     } catch (err) {
-      setError(err.response?.data?.message || "حدث خطأ ما");
+      toast.error(err.response?.data?.message || "حدث خطأ ما");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -25,6 +34,7 @@ function ForgotPassword() {
       style={{ direction: "rtl" }}
       className="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-500 to-purple-600 py-12 px-4 sm:px-6 lg:px-8"
     >
+      <ToastContainer theme="colored" />
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-lg">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
           استعادة كلمة المرور
@@ -51,17 +61,17 @@ function ForgotPassword() {
             </div>
           </div>
 
-          {message && (
-            <div className="text-green-500 text-sm mt-2">{message}</div>
-          )}
-          {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
-
           <div>
             <button
               type="submit"
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              disabled={loading}
             >
-              استعادة كلمة المرور
+              {loading ? (
+                <FaSpinner className="animate-spin mr-2" />
+              ) : (
+                "استعادة كلمة المرور"
+              )}
             </button>
           </div>
         </form>
