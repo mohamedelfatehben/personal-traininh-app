@@ -4,9 +4,9 @@ import { useSelector } from "react-redux";
 import {
   FaClipboardList,
   FaCalendarCheck,
-  FaEdit,
   FaDumbbell,
   FaUtensils,
+  FaEdit,
 } from "react-icons/fa";
 import PlanSelection from "../../components/trainee/PlanSelection";
 import PaymentModal from "../../components/trainee/PaymentModal";
@@ -90,7 +90,7 @@ const ClientDashboard = () => {
       }
     }
   }, [user.plan?.subscriptionEnd]);
-  console.log(user);
+
   return (
     <Layout>
       <div className="p-4 md:p-6 bg-gray-100 min-h-screen">
@@ -224,13 +224,21 @@ const ClientDashboard = () => {
                         {getMealsForDay(selectedDay).length > 0 ? (
                           getMealsForDay(selectedDay).map((meal) => (
                             <div
-                              key={meal._id}
+                              key={meal.name}
                               className="p-4 bg-gray-100 rounded shadow hover:shadow-lg transition-shadow duration-300 ease-in-out"
                             >
                               <FaUtensils className="text-indigo-500 mb-2 text-2xl" />
                               <p className="font-semibold text-gray-700">
-                                {meal.meal} - {meal.quantity}
+                                {meal.name}
                               </p>
+                              <ul className="text-gray-600">
+                                {meal.ingredients.map((ingredient, index) => (
+                                  <li key={index}>
+                                    {ingredient.ingredient} -{" "}
+                                    {ingredient.quantity}
+                                  </li>
+                                ))}
+                              </ul>
                             </div>
                           ))
                         ) : (

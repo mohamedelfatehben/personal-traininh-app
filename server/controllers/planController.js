@@ -22,7 +22,6 @@ exports.createPlan = async (req, res) => {
 
 exports.updatePlan = async (req, res) => {
   const { name, type, description, price, paymentType, days } = req.body;
-
   try {
     const plan = await Plan.findById(req.params.id);
     if (plan) {
