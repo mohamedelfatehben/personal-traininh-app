@@ -111,15 +111,15 @@ const DailyProgramsSection = () => {
           <table className="min-w-full bg-white">
             <thead>
               <tr>
-                <th className="py-2 px-4 border-b text-left">الاسم</th>
-                <th className="py-2 px-4 border-b text-left">
+                <th className="py-2 px-4 border-b text-right">الاسم</th>
+                <th className="py-2 px-4 border-b text-right">
                   مجموعات العضلات
                 </th>
-                <th className="py-2 px-4 border-b text-left">عدد الوجبات</th>
-                <th className="py-2 px-4 border-b text-left">
+                <th className="py-2 px-4 border-b text-right">عدد الوجبات</th>
+                <th className="py-2 px-4 border-b text-right">
                   السعرات الحرارية
                 </th>
-                <th className="py-2 px-4 border-b text-left">الإجراءات</th>
+                <th className="py-2 px-4 border-b text-right">الإجراءات</th>
               </tr>
             </thead>
             <tbody>

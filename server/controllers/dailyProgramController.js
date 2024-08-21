@@ -39,7 +39,13 @@ exports.createDailyProgram = async (req, res) => {
     const dailyProgram = new DailyProgram({
       name,
       exercises,
-      meals,
+      meals: meals.map((meal) => ({
+        name: meal.name,
+        ingredients: meal.ingredients.map((ingredient) => ({
+          ingredient: ingredient.ingredient,
+          quantity: ingredient.quantity,
+        })),
+      })),
       calories,
     });
 
@@ -60,7 +66,7 @@ exports.updateDailyProgram = async (req, res) => {
     if (dailyProgram) {
       dailyProgram.name = name || dailyProgram.name;
       dailyProgram.exercises = exercises || dailyProgram.exercises;
-      dailyProgram.meals = meals || dailyProgram.meals;
+      dailyProgram.meals = meals ? [...meals] : dailyProgram.meals;
       dailyProgram.calories = calories || dailyProgram.calories;
       await dailyProgram.save();
       return res.json(dailyProgram);

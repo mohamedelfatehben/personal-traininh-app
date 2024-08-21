@@ -79,7 +79,7 @@ function App() {
 
     fetchUserData();
   }, [user.token, dispatch]);
-  console.log(user);
+
   return (
     <BrowserRouter>
       {openDataModel && (

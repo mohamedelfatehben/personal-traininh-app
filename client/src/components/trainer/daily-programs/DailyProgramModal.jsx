@@ -4,7 +4,7 @@ import Modal from "../../common/Modal";
 import { getAllExercisesApi } from "../../../api/trainer";
 import { useSelector } from "react-redux";
 import Select from "react-select";
-import { FaEdit } from "react-icons/fa";
+import { FaTrash, FaEdit } from "react-icons/fa";
 
 const DailyProgramModal = ({
   isOpen,
@@ -19,10 +19,14 @@ const DailyProgramModal = ({
   );
   const [meals, setMeals] = useState(dailyProgram ? dailyProgram.meals : []);
   const [calories, setCalories] = useState(
-    dailyProgram ? +dailyProgram.calories : 0
+    dailyProgram ? dailyProgram.calories : ""
   );
   const [allExercises, setAllExercises] = useState([]);
-  const [mealInput, setMealInput] = useState({ meal: "", quantity: "" });
+  const [mealName, setMealName] = useState("");
+  const [ingredients, setIngredients] = useState([
+    { ingredient: "", quantity: "" },
+  ]);
+  const [isEditingMeal, setIsEditingMeal] = useState(false);
   const [editingMealIndex, setEditingMealIndex] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -42,21 +46,30 @@ const DailyProgramModal = ({
     };
 
     fetchExercises();
-  }, []);
+  }, [user.token]);
 
   useEffect(() => {
     if (dailyProgram) {
       setName(dailyProgram.name);
       setExercises(dailyProgram.exercises);
       setMeals(dailyProgram.meals);
-      setCalories(+dailyProgram.calories);
+      setCalories(dailyProgram.calories);
     } else {
-      setName("");
-      setExercises([]);
-      setMeals([]);
-      setCalories(0);
+      resetForm();
     }
   }, [dailyProgram]);
+
+  const resetForm = () => {
+    setName("");
+    setExercises([]);
+    setMeals([]);
+    setCalories("");
+    setMealName("");
+    setIngredients([{ ingredient: "", quantity: "" }]);
+    setIsEditingMeal(false);
+    setEditingMealIndex(null);
+    setError("");
+  };
 
   const handleExerciseChange = (selectedOptions) => {
     const selectedExercises = selectedOptions.map((option) => ({
@@ -66,52 +79,93 @@ const DailyProgramModal = ({
     setExercises(selectedExercises);
   };
 
-  const addMeal = () => {
-    if (editingMealIndex !== null) {
-      const updatedMeals = meals.map((meal, index) =>
-        index === editingMealIndex ? mealInput : meal
+  const handleIngredientChange = (index, field, value) => {
+    const updatedIngredients = ingredients.map((ing, i) =>
+      i === index ? { ...ing, [field]: value } : ing
+    );
+    setIngredients(updatedIngredients);
+  };
+
+  const addIngredient = () => {
+    setIngredients([...ingredients, { ingredient: "", quantity: "" }]);
+  };
+
+  const removeIngredient = (index) => {
+    setIngredients(ingredients.filter((_, i) => i !== index));
+  };
+
+  const addOrUpdateMeal = () => {
+    if (!mealName) {
+      setError("اسم الوجبة مطلوب");
+      return;
+    }
+
+    if (ingredients.some((ing) => !ing.ingredient || !ing.quantity)) {
+      setError("يجب تعبئة جميع مكونات الوجبة والكمية");
+      return;
+    }
+
+    const newMeal = { name: mealName, ingredients };
+    if (isEditingMeal) {
+      setMeals((prevMeals) =>
+        prevMeals.map((meal, index) =>
+          index === editingMealIndex ? newMeal : meal
+        )
       );
-      setMeals(updatedMeals);
+      setIsEditingMeal(false);
       setEditingMealIndex(null);
     } else {
-      if (mealInput.meal && mealInput.quantity) {
-        setMeals([...meals, mealInput]);
-      } else {
-        setError("اسم الوجبة والكمية مطلوبان");
-      }
+      setMeals((prevMeals) => [...prevMeals, newMeal]);
     }
-    setMealInput({ meal: "", quantity: "" });
+    setMealName("");
+    setIngredients([{ ingredient: "", quantity: "" }]);
+    setError("");
+  };
+
+  const editMeal = (index) => {
+    const meal = meals[index];
+    setMealName(meal.name);
+    setIngredients(meal.ingredients);
+    setIsEditingMeal(true);
+    setEditingMealIndex(index);
+  };
+
+  const removeMeal = (index) => {
+    setMeals(meals.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
-    if (mealInput.meal !== "" && mealInput.quantity !== "") {
-      setMeals([...meals, mealInput]);
-    }
     if (!name) {
       setError("اسم البرنامج مطلوب");
       return;
     }
+
     if (exercises.length === 0) {
       setError("مطلوب تمرين واحد على الأقل");
       return;
     }
+
     if (calories <= 0) {
       setError("يجب أن تكون السعرات الحرارية رقمًا موجبًا");
       return;
     }
 
-    const filteredMeals = meals.filter((meal) => meal.meal && meal.quantity);
+    // Ensure any unsubmitted meal is added before submission
+    if (mealName || ingredients.some((ing) => ing.ingredient && ing.quantity)) {
+      addOrUpdateMeal();
+    }
 
     setIsSubmitting(true);
     try {
+      // Use updated state to submit the form
       await saveDailyProgram({
         name,
-        exercises,
-        meals: filteredMeals,
-        calories: +calories,
+        exercises: exercises.map((e) => e._id),
+        meals,
+        calories,
       });
       close();
     } catch (error) {
@@ -121,31 +175,8 @@ const DailyProgramModal = ({
     }
   };
 
-  const handleMealChange = (field, value) => {
-    setError("");
-    setMealInput({ ...mealInput, [field]: value });
-  };
-
-  const editMeal = (index) => {
-    setMealInput(meals[index]);
-    setEditingMealIndex(index);
-  };
-
-  const removeMeal = (index) => {
-    setMeals(meals.filter((_, i) => i !== index));
-  };
-
-  const removeExercise = (index) => {
-    setExercises(exercises.filter((_, i) => i !== index));
-  };
-
   const close = () => {
-    setName("");
-    setExercises([]);
-    setMeals([]);
-    setCalories(0);
-    setError("");
-    setMealInput({ meal: "", quantity: "" });
+    resetForm();
     closeModal();
   };
 
@@ -187,7 +218,9 @@ const DailyProgramModal = ({
                   <span>{exercise.name}</span>
                   <button
                     type="button"
-                    onClick={() => removeExercise(index)}
+                    onClick={() =>
+                      setExercises(exercises.filter((_, i) => i !== index))
+                    }
                     className="text-red-500 hover:text-red-700"
                   >
                     X
@@ -201,56 +234,95 @@ const DailyProgramModal = ({
           <label className="block text-sm sm:text-base font-semibold text-indigo-700">
             الوجبات
           </label>
-          <div className="flex items-center gap-x-2">
+          {meals.map((meal, mealIndex) => (
+            <div key={mealIndex} className="mb-4">
+              <div className="flex items-center gap-x-2">
+                <span className="font-semibold text-gray-700">
+                  وجبة {meal.name}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => editMeal(mealIndex)}
+                  className="text-blue-500 hover:text-blue-700"
+                >
+                  <FaEdit />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => removeMeal(mealIndex)}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  <FaTrash />
+                </button>
+              </div>
+              <div className="mt-2 flex gap-x-1 flex-wrap">
+                {meal.ingredients.map((ingredient, index) => (
+                  <div
+                    key={index}
+                    className="bg-indigo-100 text-indigo-700 flex justify-between items-center px-2 py-1 rounded w-fit mb-2"
+                  >
+                    <span>
+                      {ingredient.ingredient} ({ingredient.quantity})
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+          <div className="mt-4">
+            <h4 className="font-semibold text-gray-700">
+              {isEditingMeal ? "تعديل الوجبة" : "إضافة وجبة جديدة"}
+            </h4>
             <input
               type="text"
-              value={mealInput.meal}
-              onChange={(e) => handleMealChange("meal", e.target.value)}
-              className="p-2 flex-grow shadow-sm sm:text-sm border border-indigo-500 rounded-md"
+              value={mealName}
+              onChange={(e) => setMealName(e.target.value)}
+              className="p-2 mb-2 block w-full shadow-sm sm:text-sm border border-indigo-500 rounded-md"
               placeholder="اسم الوجبة"
             />
-            <input
-              type="text"
-              value={mealInput.quantity}
-              onChange={(e) => handleMealChange("quantity", e.target.value)}
-              className="p-2 flex-grow shadow-sm sm:text-sm border border-indigo-500 rounded-md"
-              placeholder="الكمية"
-            />
-            <button
-              type="button"
-              onClick={addMeal}
-              className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700"
-            >
-              {editingMealIndex !== null ? "تحديث الوجبة" : "إضافة وجبة"}
-            </button>
-          </div>
-          <div className="mt-2 flex gap-x-1 gap-y-2 flex-wrap">
-            {meals.map((meal, index) => (
-              <div
-                key={index}
-                className="bg-indigo-100 text-indigo-700 flex justify-between items-center px-2 py-1 rounded w-fit"
-              >
-                <span>
-                  {meal.meal} ({meal.quantity})
-                </span>
-                <div className="flex gap-x-2">
-                  <button
-                    type="button"
-                    onClick={() => editMeal(index)}
-                    className="text-yellow-500 hover:text-yellow-700"
-                  >
-                    <FaEdit />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => removeMeal(index)}
-                    className="text-red-500 hover:text-red-700"
-                  >
-                    X
-                  </button>
-                </div>
+            {ingredients.map((ingredient, index) => (
+              <div key={index} className="flex items-center gap-x-2 mb-2">
+                <input
+                  type="text"
+                  value={ingredient.ingredient}
+                  onChange={(e) =>
+                    handleIngredientChange(index, "ingredient", e.target.value)
+                  }
+                  className="p-2 flex-grow shadow-sm sm:text-sm border border-indigo-500 rounded-md"
+                  placeholder="اسم المكون"
+                />
+                <input
+                  type="text"
+                  value={ingredient.quantity}
+                  onChange={(e) =>
+                    handleIngredientChange(index, "quantity", e.target.value)
+                  }
+                  className="p-2 flex-grow shadow-sm sm:text-sm border border-indigo-500 rounded-md"
+                  placeholder="الكمية"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeIngredient(index)}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  X
+                </button>
               </div>
             ))}
+            <button
+              type="button"
+              onClick={addIngredient}
+              className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700"
+            >
+              إضافة مكون
+            </button>
+            <button
+              type="button"
+              onClick={addOrUpdateMeal}
+              className="mt-4 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700"
+            >
+              {isEditingMeal ? "تحديث الوجبة" : "إضافة وجبة"}
+            </button>
           </div>
         </div>
         <div className="mt-4">

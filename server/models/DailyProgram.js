@@ -5,11 +5,16 @@ const DailyProgramSchema = new mongoose.Schema({
   exercises: [{ type: mongoose.Schema.Types.ObjectId, ref: "Exercise" }],
   meals: [
     {
-      meal: {
-        type: String,
-        required: true,
-      },
-      quantity: { type: String, required: true },
+      name: { type: String, required: true }, // Name of the meal (e.g., breakfast, lunch)
+      ingredients: [
+        {
+          ingredient: {
+            type: String,
+            required: true,
+          },
+          quantity: { type: String, required: true },
+        },
+      ],
     },
   ],
   calories: { type: String, required: true },

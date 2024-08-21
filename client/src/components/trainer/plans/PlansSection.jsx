@@ -96,12 +96,12 @@ const PlansSection = () => {
               <table className="min-w-full bg-white">
                 <thead>
                   <tr>
-                    <th className="py-2 px-4 border-b text-left">الاسم</th>
-                    <th className="py-2 px-4 border-b text-left">النوع</th>
-                    <th className="py-2 px-4 border-b text-left">الوصف</th>
-                    <th className="py-2 px-4 border-b text-left">السعر</th>
-                    <th className="py-2 px-4 border-b text-left">نوع الدفع</th>
-                    <th className="py-2 px-4 border-b text-left">الإجراءات</th>
+                    <th className="py-2 px-4 border-b text-right">الاسم</th>
+                    <th className="py-2 px-4 border-b text-right">النوع</th>
+                    <th className="py-2 px-4 border-b text-right">الوصف</th>
+                    <th className="py-2 px-4 border-b text-right">السعر</th>
+                    <th className="py-2 px-4 border-b text-right">نوع الدفع</th>
+                    <th className="py-2 px-4 border-b text-right">الإجراءات</th>
                   </tr>
                 </thead>
                 <tbody>

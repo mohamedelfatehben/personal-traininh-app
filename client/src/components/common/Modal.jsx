@@ -17,7 +17,7 @@ function Modal({ isOpen, closeModal, title, children }) {
       >
         <div className="fixed inset-0 overflow-y-auto">
           <div className="flex min-h-full items-center justify-center p-4">
-            <Dialog.Panel className="w-full max-w-fit rounded bg-white p-6 shadow-xl relative">
+            <Dialog.Panel className="w-full max-w-fit rounded bg-white p-6 pt-10 shadow-xl relative">
               <button
                 onClick={closeModal}
                 className="absolute top-4 right-4 text-gray-600 hover:text-gray-800"

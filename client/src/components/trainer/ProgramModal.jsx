@@ -73,6 +73,20 @@ const ProgramModal = ({ isOpen, closeModal, user, onSave }) => {
     const program = programs.find((program) => program._id === id);
     setSelectedProgram(program);
   };
+
+  const getArabicDay = (day) => {
+    const days = {
+      Monday: "الاثنين",
+      Tuesday: "الثلاثاء",
+      Wednesday: "الأربعاء",
+      Thursday: "الخميس",
+      Friday: "الجمعة",
+      Saturday: "السبت",
+      Sunday: "الأحد",
+    };
+    return days[day] || day;
+  };
+
   return (
     <Modal title="تعيين برنامج" isOpen={isOpen} closeModal={close}>
       {error && <div className="text-red-500">{error}</div>}
@@ -113,7 +127,7 @@ const ProgramModal = ({ isOpen, closeModal, user, onSave }) => {
                         onClick={() => toggleDayExpansion(day)}
                       >
                         <h5 className="text-md font-semibold text-gray-700">
-                          {day}
+                          {getArabicDay(day)}
                         </h5>
                         {expandedDays[day] ? (
                           <FaChevronUp className="text-gray-700" />

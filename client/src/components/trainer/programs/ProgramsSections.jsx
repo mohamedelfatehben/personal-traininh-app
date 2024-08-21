@@ -103,10 +103,10 @@ const ProgramsSection = () => {
           <table className="min-w-full bg-white">
             <thead>
               <tr>
-                <th className="py-2 px-4 border-b text-left">الاسم</th>
-                <th className="py-2 px-4 border-b text-left">الوصف</th>
-                <th className="py-2 px-4 border-b text-left">الأيام</th>
-                <th className="py-2 px-4 border-b text-left">الإجراءات</th>
+                <th className="py-2 px-4 border-b text-right">الاسم</th>
+                <th className="py-2 px-4 border-b text-right">الوصف</th>
+                <th className="py-2 px-4 border-b text-right">الأيام</th>
+                <th className="py-2 px-4 border-b text-right">الإجراءات</th>
               </tr>
             </thead>
             <tbody>
