@@ -143,11 +143,6 @@ const DailyProgramModal = ({
       return;
     }
 
-    if (exercises.length === 0) {
-      setError("مطلوب تمرين واحد على الأقل");
-      return;
-    }
-
     if (calories <= 0) {
       setError("يجب أن تكون السعرات الحرارية رقمًا موجبًا");
       return;
@@ -163,7 +158,7 @@ const DailyProgramModal = ({
       // Use updated state to submit the form
       await saveDailyProgram({
         name,
-        exercises: exercises.map((e) => e._id),
+        exercises: exercises.length > 0 ? exercises.map((e) => e._id) : [],
         meals,
         calories,
       });

@@ -14,6 +14,7 @@ function ForgotPassword() {
     setLoading(true);
 
     try {
+      // eslint-disable-next-line no-unused-vars
       const response = await requestPasswordResetApi(email);
       toast.success(
         "تم إرسال رسالة إعادة تعيين كلمة المرور إلى بريدك الإلكتروني"
