@@ -63,7 +63,8 @@ exports.getExerciseById = async (req, res) => {
 };
 
 exports.updateExercise = async (req, res) => {
-  const { name, muscleGroup, description, videoUrl, image } = req.body;
+  const { name, muscleGroup, description, videoUrl } = req.body;
+  const image = req.file;
 
   try {
     let exercise = await Exercise.findById(req.params.id);
@@ -71,11 +72,16 @@ exports.updateExercise = async (req, res) => {
       return res.status(404).json({ msg: "Exercise not found" });
     }
 
+    // Update the exercise properties if provided
     exercise.name = name || exercise.name;
     exercise.muscleGroup = muscleGroup || exercise.muscleGroup;
     exercise.description = description || exercise.description;
     exercise.videoUrl = videoUrl || exercise.videoUrl;
-    exercise.image = image.buffer.toString("base64") || exercise.image;
+
+    // Update the image only if a new image file is provided
+    if (image) {
+      exercise.image = image.buffer.toString("base64");
+    }
 
     await exercise.save();
     res.json(exercise);

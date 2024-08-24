@@ -71,6 +71,13 @@ const ClientDashboard = () => {
     }
     return [];
   };
+  const getCaloriesForDay = (day) => {
+    const program = user.program;
+    if (program && program.days && program.days[day]) {
+      return program.days[day].calories;
+    }
+    return "";
+  };
 
   useEffect(() => {
     if (user.plan?.subscriptionEnd) {
@@ -217,6 +224,12 @@ const ClientDashboard = () => {
                           : "md:col-span-1"
                       }
                     >
+                      <h3 className="text-xl font-semibold mb-4 text-gray-700">
+                        السعرات الحرارية :{" "}
+                        <span className="font-bold">
+                          {getCaloriesForDay(selectedDay)}
+                        </span>
+                      </h3>
                       <h3 className="text-xl font-semibold mb-4 text-gray-700">
                         الوجبات
                       </h3>
