@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { getAllTraineesApi } from "../../api/users";
 import { getPlansApi } from "../../api/plans";
 import { FaCheckCircle, FaTimesCircle, FaEye, FaClock } from "react-icons/fa";
+import { BiDetail } from "react-icons/bi";
 import Layout from "../../components/Layout";
 import UserModal from "../../components/trainer/UserModal";
 import NextPaymentModal from "../../components/trainer/NextPaymentModal";
@@ -9,9 +10,11 @@ import ProgramModal from "../../components/trainer/ProgramModal";
 import Pagination from "../../components/common/Pagination";
 import { useSelector } from "react-redux";
 import Excerpted from "../../components/common/Excerepted";
+import FormImagesModal from "../../components/trainer/FormImagesModal";
 
 const TrainerDashboard = () => {
   const user = useSelector((state) => state.authReducer);
+  console.log(user);
   const [trainees, setTrainees] = useState([]);
   const [plans, setPlans] = useState([]);
   const [page, setPage] = useState(1);
@@ -21,10 +24,13 @@ const TrainerDashboard = () => {
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [isProgramModalOpen, setIsProgramModalOpen] = useState(false);
+  const [isFormImagesModalOpen, setIsFormImagesModalOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
   const [filterNextPaymentStatus, setFilterNextPaymentStatus] = useState("");
   const [filterPlan, setFilterPlan] = useState("");
+  const [currentImages, setCurrentImages] = useState([]); // Store current form images
+  const [previousImages, setPreviousImages] = useState([]); // Store previous form images
 
   const debounce = (func, delay) => {
     let timeoutId;
@@ -45,7 +51,8 @@ const TrainerDashboard = () => {
         searchText,
         filterStatus,
         filterNextPaymentStatus,
-        filterPlan
+        filterPlan,
+        user.gender
       );
       setTrainees(data.data.trainees);
       setTotalPages(data.data.totalPages);
@@ -71,7 +78,7 @@ const TrainerDashboard = () => {
   ]);
 
   useEffect(() => {
-    if (user.token) {
+    if (user.token && user.gender !== "") {
       fetchPlans();
     }
   }, [user.token]);
@@ -89,7 +96,7 @@ const TrainerDashboard = () => {
   ]);
 
   useEffect(() => {
-    if (user.token) fetchTrainees();
+    if (user.token && user.gender) fetchTrainees();
   }, [page, user.token]);
 
   const openUserModal = (user) => {
@@ -134,6 +141,17 @@ const TrainerDashboard = () => {
     );
     setTrainees(updatedTrainees);
     closeProgramModal();
+  };
+
+  const openFormImagesModal = (trainee) => {
+    // Assuming trainee has `currentFormImages` and `previousFormImages` arrays
+    setCurrentImages(trainee.currentFormImages || []);
+    setPreviousImages(trainee.previousFormImages || []);
+    setIsFormImagesModalOpen(true);
+  };
+
+  const closeFormImagesModal = () => {
+    setIsFormImagesModalOpen(false);
   };
 
   return (
@@ -298,12 +316,20 @@ const TrainerDashboard = () => {
                         </button>
                       )}
                     </td>
-                    <td className="py-2 px-4 border-b text-nowrap">
+                    <td className="py-2 px-4 border-b text-nowrap flex gap-x-2">
                       <button
+                        title="التفاصيل"
                         className="text-indigo-600 hover:text-indigo-800 flex items-center mr-4"
                         onClick={() => openUserModal(trainee)}
                       >
-                        <FaEye className="mr-2" /> التفاصيل
+                        <BiDetail />
+                      </button>
+                      <button
+                        title="عرض الصور"
+                        className="text-indigo-600 hover:text-indigo-800 flex items-center ml-4"
+                        onClick={() => openFormImagesModal(trainee)} // New button to view form images
+                      >
+                        <FaEye />
                       </button>
                     </td>
                   </tr>
@@ -340,6 +366,12 @@ const TrainerDashboard = () => {
         closeModal={closeProgramModal}
         user={selectedUser}
         onSave={handleProgramSave}
+      />
+      <FormImagesModal
+        isOpen={isFormImagesModalOpen}
+        closeModal={closeFormImagesModal}
+        currentImages={currentImages}
+        previousImages={previousImages}
       />
     </Layout>
   );

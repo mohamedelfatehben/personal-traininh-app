@@ -30,7 +30,7 @@ function App() {
         const token = window.localStorage.getItem("token");
         if (token) {
           const response = await getUserApi(token);
-          const userData = response.data;
+          const userData = await response.data;
           dispatch(
             setUserInfo({
               id: userData.id,
@@ -40,6 +40,7 @@ function App() {
               height: userData.height,
               weight: userData.weight,
               budget: userData.budget,
+              gender: userData.gender,
               trainingFrequency: userData.trainingFrequency,
               foodAllergies:
                 userData.foodAllergies?.length > 0

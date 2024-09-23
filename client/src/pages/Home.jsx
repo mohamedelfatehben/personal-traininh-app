@@ -13,7 +13,7 @@ function Home() {
               className="w-36 h-auto mb-8 rounded-full transform transition duration-500 hover:scale-110"
             />
             <h1 className="text-5xl font-extrabold text-white leading-tight mb-4">
-              احصل على لياقتك مع المدرب نبيل
+              احصل على لياقتك مع الكوتش نبيل
             </h1>
             <p className="text-xl text-indigo-100 mb-8">
               انضم إلى مئات المتدربين وابدأ رحلتك نحو لياقة بدنية أفضل اليوم!

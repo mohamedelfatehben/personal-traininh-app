@@ -184,6 +184,7 @@ exports.getAllTrainees = async (req, res) => {
     const filterStatus = req.query.filterStatus || "";
     const filterNextPaymentStatus = req.query.filterNextPaymentStatus || "";
     const filterPlan = req.query.filterPlan || "";
+    const gender = req.query.gender || "";
     const skip = (page - 1) * limit;
 
     const query = { role: "trainee" };
@@ -199,6 +200,11 @@ exports.getAllTrainees = async (req, res) => {
 
     if (filterPlan) {
       query.currentPlan = filterPlan;
+    }
+
+    // Filter by gender if it's provided
+    if (gender) {
+      query.gender = gender;
     }
 
     const trainees = await User.find(query)
@@ -234,6 +240,35 @@ exports.getAllTrainees = async (req, res) => {
         currentPage: page,
       });
     }
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};
+
+exports.updateUserFormImages = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    // Handle the uploaded images
+    const images = req.files.map((file) => file.buffer.toString("base64"));
+
+    // Check that the uploaded images do not exceed the limit (3 images)
+    if (images.length > 3) {
+      return res.status(400).json({ msg: "You can upload up to 3 images" });
+    }
+
+    // Replace previousFormImages with currentFormImages
+    user.previousFormImages = user.currentFormImages || [];
+    user.currentFormImages = images;
+
+    await user.save();
+
+    res.json({ msg: "User form images updated successfully", user });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");

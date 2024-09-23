@@ -11,6 +11,7 @@ const initialState = {
   age: window.localStorage.getItem("age") || "",
   height: window.localStorage.getItem("height") || "",
   weight: window.localStorage.getItem("weight") || "",
+  gender: window.localStorage.getItem("gender") || "",
   fitnessGoals: window.localStorage.getItem("fitnessGoals") || "",
   trainingFrequency: window.localStorage.getItem("trainingFrequency") || "",
   budget: window.localStorage.getItem("budget") || "",
@@ -42,6 +43,7 @@ export const setUserInfo = (payload) => {
     height,
     weight,
     budget,
+    gender,
     fitnessGoals,
     trainingFrequency,
     foodAllergies,
@@ -61,6 +63,7 @@ export const setUserInfo = (payload) => {
       height,
       weight,
       budget,
+      gender,
       fitnessGoals,
       trainingFrequency,
       foodAllergies,
@@ -100,6 +103,7 @@ const authReducer = (state = initialState, action) => {
       window.localStorage.removeItem("age");
       window.localStorage.removeItem("height");
       window.localStorage.removeItem("weight");
+      window.localStorage.removeItem("gender");
       window.localStorage.removeItem("budget");
       window.localStorage.removeItem("fitnessGoals");
       window.localStorage.removeItem("trainingFrequency");
@@ -118,6 +122,7 @@ const authReducer = (state = initialState, action) => {
         age: "",
         height: "",
         weight: "",
+        gender: "",
         budget: "",
         fitnessGoals: "",
         trainingFrequency: "",
@@ -136,6 +141,7 @@ const authReducer = (state = initialState, action) => {
       window.localStorage.setItem("age", action.payload.age);
       window.localStorage.setItem("height", action.payload.height);
       window.localStorage.setItem("weight", action.payload.weight);
+      window.localStorage.setItem("gender", action.payload.gender);
       window.localStorage.setItem("budget", action.payload.budget);
       window.localStorage.setItem("fitnessGoals", action.payload.fitnessGoals);
       window.localStorage.setItem("phoneNumber", action.payload.phoneNumber);
@@ -172,6 +178,7 @@ const authReducer = (state = initialState, action) => {
         age: action.payload.age,
         height: action.payload.height,
         weight: action.payload.weight,
+        gender: action.payload.gender,
         budget: action.payload.budget,
         fitnessGoals: action.payload.fitnessGoals,
         trainingFrequency: action.payload.trainingFrequency,
@@ -190,6 +197,7 @@ const authReducer = (state = initialState, action) => {
       window.localStorage.setItem("age", action.payload.age);
       window.localStorage.setItem("height", action.payload.height);
       window.localStorage.setItem("weight", action.payload.weight);
+      window.localStorage.setItem("gender", action.payload.gender);
       window.localStorage.setItem("budget", action.payload.budget);
       window.localStorage.setItem("fitnessGoals", action.payload.fitnessGoals);
       window.localStorage.setItem("phoneNumber", action.payload.phoneNumber);
@@ -209,6 +217,7 @@ const authReducer = (state = initialState, action) => {
         age: action.payload.age,
         height: action.payload.height,
         weight: action.payload.weight,
+        gender: action.payload.gender,
         budget: action.payload.budget,
         fitnessGoals: action.payload.fitnessGoals,
         trainingFrequency: action.payload.trainingFrequency,

@@ -15,6 +15,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Layout from "../../components/Layout";
 import ExerciseModal from "../../components/trainee/ExerciseModal";
+import UploadFormImagesModal from "../../components/trainee/UploadFormImagesModal";
 
 const ClientDashboard = () => {
   const user = useSelector((state) => state.authReducer);
@@ -23,6 +24,7 @@ const ClientDashboard = () => {
     useState(false);
   const [isMultiStepFormOpen, setIsMultiStepFormOpen] = useState(false);
   const [isExerciseModalOpen, setIsExerciseModalOpen] = useState(false);
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false); // New state for upload modal
   const [selectedExercise, setSelectedExercise] = useState(null);
   const [selectedDay, setSelectedDay] = useState(moment().format("dddd"));
 
@@ -110,6 +112,21 @@ const ClientDashboard = () => {
           بخطط مخصصة وتوجيهات خبراء. يمكنك دفع اشتراكك عبر CCP أو زيارة مكتبنا
           للدفع الشخصي.
         </p>
+        {/* Add button to open upload modal */}
+        <button
+          className="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-800"
+          onClick={() => setIsUploadModalOpen(true)}
+        >
+          تحميل صور الحالة الحالية
+        </button>
+
+        {/* Render the UploadFormImagesModal */}
+        {isUploadModalOpen && (
+          <UploadFormImagesModal
+            isOpen={isUploadModalOpen}
+            closeModal={() => setIsUploadModalOpen(false)}
+          />
+        )}
 
         {user.gender === "" && (
           <div className="mb-4 md:mb-6">

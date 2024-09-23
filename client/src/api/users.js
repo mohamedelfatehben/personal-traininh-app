@@ -9,8 +9,10 @@ export const getAllTraineesApi = async (
   search = "",
   filterStatus = "",
   filterNextPaymentStatus = "",
-  filterPlan = ""
+  filterPlan = "",
+  gender = "male"
 ) => {
+  console.log(gender);
   return axios.get(`${API_URL}/api/users/trainees`, {
     params: {
       page,
@@ -19,6 +21,7 @@ export const getAllTraineesApi = async (
       filterStatus,
       filterNextPaymentStatus,
       filterPlan,
+      gender,
     },
     headers: {
       Authorization: `Bearer ${token}`,
@@ -29,5 +32,14 @@ export const getAllTraineesApi = async (
 export const assignProgramApi = async (data, token) => {
   return axios.post(`${API_URL}/api/users/assign-program`, data, {
     headers: { Authorization: `Bearer ${token}` },
+  });
+};
+
+export const submitFormImagesApi = async (images, token) => {
+  return axios.put(`${API_URL}/api/users/form-images`, images, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
   });
 };
